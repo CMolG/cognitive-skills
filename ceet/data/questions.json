@@ -1,0 +1,669 @@
+{
+  "meta": {
+    "name": "Cognitive Engineering Extraction Test (CEET)",
+    "version": "1.0.0",
+    "total_questions": 70,
+    "sections": 14,
+    "estimated_time_minutes": 90
+  },
+  "sections": [
+    {
+      "id": "I",
+      "title": "Architectural Philosophy & System Design",
+      "purpose": "Define the agent's baseline approach to structure, scalability, and trade-offs.",
+      "questions": [
+        {
+          "id": "Q01",
+          "slug": "scalability-heuristic",
+          "title": "The Scalability Heuristic",
+          "prompt": "When designing a new microservice from scratch, what is your default approach to data persistence? (e.g., Relational by default, NoSQL for flexibility, Event Sourcing). Justify why and when you would deviate from this default.",
+          "profile_keys": ["architectural.persistence_default", "architectural.deviation_triggers"],
+          "scoring_dimensions": ["pragmatism", "experience_depth"]
+        },
+        {
+          "id": "Q02",
+          "slug": "monolith-vs-microservices",
+          "title": "Monolith vs. Microservices",
+          "prompt": "At what exact point (team size, codebase size, traffic threshold) do you advocate breaking a monolithic application into microservices? What are the red flags that tell you it's being done too early?",
+          "profile_keys": ["architectural.decomposition_threshold", "architectural.premature_decomposition_flags"],
+          "scoring_dimensions": ["pragmatism", "risk_tolerance", "experience_depth"]
+        },
+        {
+          "id": "Q03",
+          "slug": "state-management",
+          "title": "State Management Paradigm",
+          "prompt": "In frontend or distributed backend systems, how do you prefer to handle global state? (e.g., Immutable state trees, reactive streams, localized context). What is your strict rule for mutating state?",
+          "profile_keys": ["architectural.state_paradigm", "architectural.mutation_rules"],
+          "scoring_dimensions": ["typing_rigidity", "functional_preference"]
+        },
+        {
+          "id": "Q04",
+          "slug": "build-vs-buy",
+          "title": "The 'Build vs. Buy' Threshold",
+          "prompt": "You need a feature like rate-limiting or feature-flagging. What criteria must be met for you to write it from scratch instead of integrating a third-party SaaS or open-source library?",
+          "profile_keys": ["architectural.build_vs_buy_criteria"],
+          "scoring_dimensions": ["pragmatism", "risk_tolerance", "perfectionism"]
+        },
+        {
+          "id": "Q05",
+          "slug": "concurrency-model",
+          "title": "Handling Concurrency",
+          "prompt": "Describe your preferred model for handling highly concurrent operations (e.g., Actor model, async/await event loop, multi-threading with locks). How do you proactively prevent race conditions in your architecture?",
+          "profile_keys": ["architectural.concurrency_model", "architectural.race_condition_prevention"],
+          "scoring_dimensions": ["experience_depth", "security_paranoia", "performance_obsession"]
+        }
+      ]
+    },
+    {
+      "id": "II",
+      "title": "Code Style & Syntax Fingerprint",
+      "purpose": "Build the agent's linter and typing rules.",
+      "questions": [
+        {
+          "id": "Q06",
+          "slug": "typing-rigidity",
+          "title": "Typing Rigidity",
+          "prompt": "Are you a strict static-typing advocate (e.g., strict: true in TypeScript, Rust, explicit return types everywhere), or do you prefer duck-typing/inference for the sake of development speed?",
+          "profile_keys": ["code_style.typing_rigidity"],
+          "scoring_dimensions": ["typing_rigidity", "perfectionism"]
+        },
+        {
+          "id": "Q07",
+          "slug": "naming-conventions",
+          "title": "Variable & Function Naming Conventions",
+          "prompt": "Give three examples of how you name: (a) boolean variables, (b) array variables, and (c) asynchronous fetching functions. (e.g., isLoading, usersList, fetchUserData).",
+          "profile_keys": ["code_style.naming_booleans", "code_style.naming_arrays", "code_style.naming_async"],
+          "scoring_dimensions": ["consistency", "communication_clarity"]
+        },
+        {
+          "id": "Q08",
+          "slug": "error-handling",
+          "title": "Error Handling Flow",
+          "prompt": "Do you prefer throwing exceptions (try/catch) or returning error objects/monads (e.g., [error, data] = await ..., Result<T, E> types)? Explain why.",
+          "profile_keys": ["code_style.error_paradigm", "code_style.error_justification"],
+          "scoring_dimensions": ["functional_preference", "typing_rigidity", "defensive_coding"]
+        },
+        {
+          "id": "Q09",
+          "slug": "file-structure",
+          "title": "File Structure & Modularity",
+          "prompt": "How do you organize a repository? By file type (e.g., /controllers, /models, /views) or by feature/domain (e.g., /user-auth, /checkout)?",
+          "profile_keys": ["code_style.repo_organization"],
+          "scoring_dimensions": ["architectural_thinking", "team_scalability"]
+        },
+        {
+          "id": "Q10",
+          "slug": "commenting-philosophy",
+          "title": "Commenting Philosophy",
+          "prompt": "What is your exact rule for when to write an inline comment vs. when to extract the logic into a well-named function?",
+          "profile_keys": ["code_style.commenting_rules"],
+          "scoring_dimensions": ["communication_clarity", "pragmatism"]
+        },
+        {
+          "id": "Q11",
+          "slug": "oop-vs-functional",
+          "title": "Object-Oriented vs. Functional",
+          "prompt": "Do you default to creating Classes with encapsulated state, or pure functions with immutable data structures? Where do you draw the line between the two?",
+          "profile_keys": ["code_style.paradigm_default", "code_style.paradigm_boundary"],
+          "scoring_dimensions": ["functional_preference", "typing_rigidity"]
+        }
+      ]
+    },
+    {
+      "id": "III",
+      "title": "Methodology & Software Development Life Cycle (SDLC)",
+      "purpose": "Dictate how the agent plans its work and interacts with repositories.",
+      "questions": [
+        {
+          "id": "Q12",
+          "slug": "tdd-practice",
+          "title": "Test-Driven Development (TDD)",
+          "prompt": "Do you actually write tests before code? If not, what is your genuine sequence of writing code, testing manually, and writing automated tests?",
+          "profile_keys": ["methodology.tdd_practice", "methodology.test_sequence"],
+          "scoring_dimensions": ["testing_discipline", "perfectionism"]
+        },
+        {
+          "id": "Q13",
+          "slug": "testing-pyramid",
+          "title": "Testing Pyramid",
+          "prompt": "If you only had time to write one type of test for a new feature, would it be an isolated Unit Test, an Integration Test, or an End-to-End (E2E) Test? Why?",
+          "profile_keys": ["methodology.test_priority"],
+          "scoring_dimensions": ["testing_discipline", "pragmatism"]
+        },
+        {
+          "id": "Q14",
+          "slug": "git-branching",
+          "title": "Git Branching Strategy",
+          "prompt": "What is your preferred Git workflow? (e.g., Trunk-based development with feature flags, GitFlow, GitHub flow).",
+          "profile_keys": ["methodology.git_workflow"],
+          "scoring_dimensions": ["team_scalability", "risk_tolerance"]
+        },
+        {
+          "id": "Q15",
+          "slug": "commit-message-anatomy",
+          "title": "Commit Message Anatomy",
+          "prompt": "Write exactly how you would format a commit message for fixing a null pointer exception in the payment processing module.",
+          "profile_keys": ["methodology.commit_format", "methodology.commit_example"],
+          "scoring_dimensions": ["communication_clarity", "consistency"]
+        },
+        {
+          "id": "Q16",
+          "slug": "refactoring-triggers",
+          "title": "Refactoring Triggers",
+          "prompt": "You are touching a file to add a 2-line feature, but you notice the file is a 2000-line mess. Do you refactor the whole file in the same PR, ignore it, or create a separate refactoring ticket?",
+          "profile_keys": ["methodology.refactoring_policy"],
+          "scoring_dimensions": ["pragmatism", "perfectionism", "risk_tolerance"]
+        }
+      ]
+    },
+    {
+      "id": "IV",
+      "title": "Debugging & Incident Response",
+      "purpose": "Define the agent's autonomous troubleshooting capabilities.",
+      "questions": [
+        {
+          "id": "Q17",
+          "slug": "silent-failure-protocol",
+          "title": "The 'Silent Failure' Protocol",
+          "prompt": "A background job is failing silently in production. No logs are being generated, and no errors are thrown. List your exact step-by-step diagnostic process.",
+          "profile_keys": ["debugging.silent_failure_steps"],
+          "scoring_dimensions": ["debugging_methodology", "experience_depth"]
+        },
+        {
+          "id": "Q18",
+          "slug": "log-verbosity",
+          "title": "Log Verbosity",
+          "prompt": "What is your philosophy on logging? What specific data do you include in an INFO log vs. a DEBUG log vs. an ERROR log? Do you log inputs and outputs of every major function?",
+          "profile_keys": ["debugging.log_philosophy", "debugging.log_levels"],
+          "scoring_dimensions": ["defensive_coding", "performance_obsession"]
+        },
+        {
+          "id": "Q19",
+          "slug": "root-cause-analysis",
+          "title": "Root Cause Analysis (RCA)",
+          "prompt": "After fixing a critical P0 bug, what steps do you take to ensure that specific class of bug never happens again?",
+          "profile_keys": ["debugging.rca_process"],
+          "scoring_dimensions": ["testing_discipline", "documentation_priority", "perfectionism"]
+        },
+        {
+          "id": "Q20",
+          "slug": "dependency-hell",
+          "title": "Dependency Hell",
+          "prompt": "You update a minor package, and suddenly your build fails due to conflicting peer dependencies deep in the tree. How do you resolve this without just reverting the update?",
+          "profile_keys": ["debugging.dependency_resolution"],
+          "scoring_dimensions": ["debugging_methodology", "pragmatism"]
+        }
+      ]
+    },
+    {
+      "id": "V",
+      "title": "Code Review & Communication",
+      "purpose": "Define the agent's interaction style with human engineers.",
+      "questions": [
+        {
+          "id": "Q21",
+          "slug": "pr-size-limit",
+          "title": "PR Size Limit",
+          "prompt": "What is the maximum number of lines of code or files changed before you consider a Pull Request 'too big to review properly'? What do you do if you receive one?",
+          "profile_keys": ["communication.pr_size_limit", "communication.oversized_pr_response"],
+          "scoring_dimensions": ["communication_clarity", "team_scalability"]
+        },
+        {
+          "id": "Q22",
+          "slug": "nitpick-rule",
+          "title": "The 'Nitpick' Rule",
+          "prompt": "How do you handle style or minor syntax disagreements in a Code Review if the code is logically sound? (e.g., Block the PR, approve with comments, ignore it).",
+          "profile_keys": ["communication.nitpick_handling"],
+          "scoring_dimensions": ["pragmatism", "perfectionism", "communication_clarity"]
+        },
+        {
+          "id": "Q23",
+          "slug": "mentoring-juniors",
+          "title": "Handling Junior Engineers",
+          "prompt": "A junior engineer submits a PR that works but is highly inefficient (e.g., nested loops leading to O(n²) time complexity). Draft the exact comment you would leave for them.",
+          "profile_keys": ["communication.mentoring_style", "communication.mentoring_example"],
+          "scoring_dimensions": ["communication_clarity", "empathy", "teaching_ability"]
+        },
+        {
+          "id": "Q24",
+          "slug": "defending-technical-decisions",
+          "title": "Defending Technical Decisions",
+          "prompt": "If a Product Manager insists on pushing a feature to production today, but you know it introduces severe technical debt, how do you negotiate the compromise?",
+          "profile_keys": ["communication.negotiation_style"],
+          "scoring_dimensions": ["pragmatism", "risk_tolerance", "communication_clarity"]
+        }
+      ]
+    },
+    {
+      "id": "VI",
+      "title": "Personality & Cognitive Traits",
+      "purpose": "Create the persona of the AI, making it recognizable as the cloned engineer.",
+      "questions": [
+        {
+          "id": "Q25",
+          "slug": "perfectionism-pragmatism",
+          "title": "Perfectionism vs. Pragmatism",
+          "prompt": "On a scale of 1 to 10 (1 = Hack it together now, 10 = Perfect architecture forever), where do you genuinely sit on a normal Tuesday afternoon?",
+          "profile_keys": ["personality.perfectionism_score"],
+          "scoring_dimensions": ["perfectionism", "pragmatism"]
+        },
+        {
+          "id": "Q26",
+          "slug": "frustration-tolerance",
+          "title": "Frustration Tolerance",
+          "prompt": "What specific technical anti-pattern or bad habit from other developers frustrates you the most? (e.g., Magic strings, God objects, ignoring linter rules).",
+          "profile_keys": ["personality.top_frustration"],
+          "scoring_dimensions": ["perfectionism", "communication_clarity"]
+        },
+        {
+          "id": "Q27",
+          "slug": "curiosity-novelty",
+          "title": "Curiosity & Novelty",
+          "prompt": "When a new framework or language drops (e.g., a new JavaScript meta-framework), are you an early adopter who tries it immediately, or a skeptic who waits 3 years for it to mature?",
+          "profile_keys": ["personality.novelty_seeking"],
+          "scoring_dimensions": ["novelty_seeking", "risk_tolerance"]
+        },
+        {
+          "id": "Q28",
+          "slug": "focus-blocks",
+          "title": "Focus Blocks",
+          "prompt": "Do you prefer tackling multiple small, unrelated bugs in a day, or locking into one massive, complex problem for three days straight?",
+          "profile_keys": ["personality.focus_style"],
+          "scoring_dimensions": ["focus_depth", "task_switching"]
+        },
+        {
+          "id": "Q29",
+          "slug": "flow-state",
+          "title": "The 'Zone'",
+          "prompt": "When you are in a deep flow state, what is your internal dialogue? Are you visualizing data structures, thinking in logical steps, or translating business rules directly to syntax?",
+          "profile_keys": ["personality.flow_state_cognition"],
+          "scoring_dimensions": ["cognitive_style", "abstraction_level"]
+        },
+        {
+          "id": "Q30",
+          "slug": "legacy-code-empathy",
+          "title": "Legacy Code Empathy",
+          "prompt": "When you see terrible legacy code written 4 years ago, do you assume the previous engineer was incompetent, or do you assume they were operating under extreme constraints? How does that assumption change how you rewrite it?",
+          "profile_keys": ["personality.legacy_empathy", "personality.rewrite_approach"],
+          "scoring_dimensions": ["empathy", "pragmatism"]
+        }
+      ]
+    },
+    {
+      "id": "VII",
+      "title": "Security & Threat Modeling",
+      "purpose": "Capture the engineer's paranoia and defensive coding habits.",
+      "questions": [
+        {
+          "id": "Q31",
+          "slug": "zero-trust-baseline",
+          "title": "The 'Zero Trust' Baseline",
+          "prompt": "When building an internal microservice that only communicates with other internal microservices behind a VPC, do you still implement authentication/authorization between them? Why or why not?",
+          "profile_keys": ["security.zero_trust_stance"],
+          "scoring_dimensions": ["security_paranoia", "pragmatism"]
+        },
+        {
+          "id": "Q32",
+          "slug": "secret-management",
+          "title": "Secret Management",
+          "prompt": "Describe your absolute ideal workflow for injecting secrets (API keys, DB credentials) into an application. At what point does a .env file become unacceptable to you?",
+          "profile_keys": ["security.secret_workflow", "security.env_file_threshold"],
+          "scoring_dimensions": ["security_paranoia", "experience_depth"]
+        },
+        {
+          "id": "Q33",
+          "slug": "dependency-auditing",
+          "title": "Dependency Auditing",
+          "prompt": "A critical automated pipeline fails because a deeply nested NPM/PyPI package has a reported CVE, but there is no patch available yet. Do you bypass the block to deploy, fork and patch the library yourself, or rip out the dependency?",
+          "profile_keys": ["security.cve_response"],
+          "scoring_dimensions": ["security_paranoia", "pragmatism", "risk_tolerance"]
+        },
+        {
+          "id": "Q34",
+          "slug": "input-validation",
+          "title": "Input Validation Philosophy",
+          "prompt": "Where does validation belong? (e.g., API Gateway, Controller layer, ORM layer, Database constraints). Do you duplicate validation across layers, or rely on a single source of truth?",
+          "profile_keys": ["security.validation_layers"],
+          "scoring_dimensions": ["defensive_coding", "pragmatism"]
+        },
+        {
+          "id": "Q35",
+          "slug": "csrf-xss-prevention",
+          "title": "CSRF & XSS Mitigation",
+          "prompt": "What is your default, muscle-memory approach to preventing CSRF and XSS in a standard web application?",
+          "profile_keys": ["security.csrf_xss_defaults"],
+          "scoring_dimensions": ["security_paranoia", "defensive_coding"]
+        },
+        {
+          "id": "Q36",
+          "slug": "cryptography-defaults",
+          "title": "Cryptography Defaults",
+          "prompt": "If you have to hash a password today, what algorithm do you default to (e.g., bcrypt, Argon2) and what work-factor/cost do you assign it?",
+          "profile_keys": ["security.hashing_algorithm", "security.hashing_cost"],
+          "scoring_dimensions": ["security_paranoia", "experience_depth"]
+        }
+      ]
+    },
+    {
+      "id": "VIII",
+      "title": "Performance, Profiling, & Optimization",
+      "purpose": "Map how the engineer balances efficiency against complexity.",
+      "questions": [
+        {
+          "id": "Q37",
+          "slug": "optimization-trigger",
+          "title": "The Optimization Trigger",
+          "prompt": "At what specific latency threshold (in milliseconds) do you consider a standard CRUD API endpoint 'too slow' and begin profiling it?",
+          "profile_keys": ["performance.latency_threshold_ms"],
+          "scoring_dimensions": ["performance_obsession", "pragmatism"]
+        },
+        {
+          "id": "Q38",
+          "slug": "memory-leak-hunting",
+          "title": "Hunting Memory Leaks",
+          "prompt": "A Node.js or Python process is slowly creeping up in memory usage over 48 hours until it OOMs (Out of Memory). Detail your exact toolset and sequence of commands to find the leak.",
+          "profile_keys": ["performance.memory_leak_toolset", "performance.memory_leak_process"],
+          "scoring_dimensions": ["debugging_methodology", "experience_depth"]
+        },
+        {
+          "id": "Q39",
+          "slug": "caching-strategy",
+          "title": "Caching Invalidation",
+          "prompt": "'There are only two hard things in Computer Science: cache invalidation and naming things.' What is your default caching strategy (e.g., Write-through, Write-behind, Time-To-Live) and how do you guarantee you don't serve stale data?",
+          "profile_keys": ["performance.caching_default", "performance.staleness_prevention"],
+          "scoring_dimensions": ["performance_obsession", "architectural_thinking"]
+        },
+        {
+          "id": "Q40",
+          "slug": "n-plus-one",
+          "title": "The N+1 Problem",
+          "prompt": "How do you proactively prevent N+1 query problems in your codebase? Do you rely on ORM tools (like DataLoader), or do you write custom SQL joins?",
+          "profile_keys": ["performance.n_plus_one_strategy"],
+          "scoring_dimensions": ["performance_obsession", "pragmatism"]
+        },
+        {
+          "id": "Q41",
+          "slug": "gc-awareness",
+          "title": "Garbage Collection Awareness",
+          "prompt": "Do you actively write code to minimize garbage collection pauses (e.g., object pooling, avoiding anonymous functions in loops), or do you trust the runtime until metrics prove otherwise?",
+          "profile_keys": ["performance.gc_awareness"],
+          "scoring_dimensions": ["performance_obsession", "pragmatism"]
+        },
+        {
+          "id": "Q42",
+          "slug": "frontend-render-optimization",
+          "title": "Frontend Render Optimization",
+          "prompt": "In a React/Vue application, what is your methodology for preventing unnecessary re-renders?",
+          "profile_keys": ["performance.frontend_render_strategy"],
+          "scoring_dimensions": ["performance_obsession", "experience_depth"]
+        }
+      ]
+    },
+    {
+      "id": "IX",
+      "title": "Database Deep Dive & Data Engineering",
+      "purpose": "Extract their mental model of state and data persistence.",
+      "questions": [
+        {
+          "id": "Q43",
+          "slug": "acid-vs-base",
+          "title": "ACID vs. BASE",
+          "prompt": "You are building a high-throughput system like a social media 'Like' counter. Do you enforce strict ACID compliance, or do you accept Eventual Consistency? How do you handle the UI if the database is eventually consistent?",
+          "profile_keys": ["database.consistency_model", "database.eventual_consistency_ui"],
+          "scoring_dimensions": ["pragmatism", "architectural_thinking"]
+        },
+        {
+          "id": "Q44",
+          "slug": "indexing-instincts",
+          "title": "Indexing Instincts",
+          "prompt": "When creating a new relational database table, what columns do you index by default before writing any queries?",
+          "profile_keys": ["database.default_indexes"],
+          "scoring_dimensions": ["performance_obsession", "experience_depth"]
+        },
+        {
+          "id": "Q45",
+          "slug": "zero-downtime-migrations",
+          "title": "Zero-Downtime Migrations",
+          "prompt": "You need to rename a heavily used column in a production PostgreSQL database of 500GB. Write out the exact sequence of deployment steps to achieve this with zero downtime.",
+          "profile_keys": ["database.migration_strategy"],
+          "scoring_dimensions": ["experience_depth", "risk_tolerance", "defensive_coding"]
+        },
+        {
+          "id": "Q46",
+          "slug": "orm-vs-raw-sql",
+          "title": "ORM vs. Raw SQL",
+          "prompt": "At what level of query complexity do you abandon the ORM (e.g., Prisma, Hibernate, SQLAlchemy) and write raw SQL?",
+          "profile_keys": ["database.orm_threshold"],
+          "scoring_dimensions": ["pragmatism", "performance_obsession"]
+        },
+        {
+          "id": "Q47",
+          "slug": "sharding-partitioning",
+          "title": "Sharding/Partitioning",
+          "prompt": "What is your threshold for partitioning a database table? Do you partition by time, by tenant ID, or use a hashing algorithm?",
+          "profile_keys": ["database.partitioning_strategy"],
+          "scoring_dimensions": ["experience_depth", "architectural_thinking"]
+        },
+        {
+          "id": "Q48",
+          "slug": "time-and-money",
+          "title": "Handling Time and Money",
+          "prompt": "What are your strict, unyielding rules for storing currency values and timestamps in a database?",
+          "profile_keys": ["database.currency_rules", "database.timestamp_rules"],
+          "scoring_dimensions": ["defensive_coding", "experience_depth"]
+        }
+      ]
+    },
+    {
+      "id": "X",
+      "title": "Infrastructure, CI/CD & DevOps",
+      "purpose": "Define how the agent will interact with pipelines and cloud environments.",
+      "questions": [
+        {
+          "id": "Q49",
+          "slug": "perfect-pipeline",
+          "title": "The Perfect Pipeline",
+          "prompt": "Describe your ideal CI/CD pipeline step-by-step from git push to production deployment. What gates must be passed?",
+          "profile_keys": ["infrastructure.pipeline_steps", "infrastructure.pipeline_gates"],
+          "scoring_dimensions": ["testing_discipline", "security_paranoia", "experience_depth"]
+        },
+        {
+          "id": "Q50",
+          "slug": "deployment-strategies",
+          "title": "Deployment Strategies",
+          "prompt": "Do you prefer Blue/Green deployments, Canary releases, or Rolling updates? In what scenario would you choose the others?",
+          "profile_keys": ["infrastructure.deployment_default", "infrastructure.deployment_alternatives"],
+          "scoring_dimensions": ["risk_tolerance", "pragmatism"]
+        },
+        {
+          "id": "Q51",
+          "slug": "iac-choice",
+          "title": "Infrastructure as Code (IaC)",
+          "prompt": "Terraform, AWS CDK, or Pulumi? Justify your choice based on state management and developer experience.",
+          "profile_keys": ["infrastructure.iac_choice", "infrastructure.iac_justification"],
+          "scoring_dimensions": ["pragmatism", "experience_depth"]
+        },
+        {
+          "id": "Q52",
+          "slug": "alerting-fatigue",
+          "title": "Alerting Fatigue",
+          "prompt": "What constitutes a 'Pageable' alert that should wake you up at 3:00 AM vs. a 'Warning' alert that can wait until Monday morning?",
+          "profile_keys": ["infrastructure.alerting_tiers"],
+          "scoring_dimensions": ["pragmatism", "risk_tolerance"]
+        },
+        {
+          "id": "Q53",
+          "slug": "ephemeral-environments",
+          "title": "Ephemeral Environments",
+          "prompt": "Do you require feature-branch deployments (preview environments) for every PR? How do you handle database state for these ephemeral environments?",
+          "profile_keys": ["infrastructure.ephemeral_env_policy"],
+          "scoring_dimensions": ["testing_discipline", "pragmatism"]
+        }
+      ]
+    },
+    {
+      "id": "XI",
+      "title": "Edge Cases, Failures, & Chaos Engineering",
+      "purpose": "Test the agent's resilience and anticipation of disaster.",
+      "questions": [
+        {
+          "id": "Q54",
+          "slug": "network-partitions",
+          "title": "Network Partitions",
+          "prompt": "Service A calls Service B. Service B processes the request successfully but the network drops before Service A receives the 200 OK. Service A retries. How do you ensure this doesn't corrupt data? (Idempotency mapping).",
+          "profile_keys": ["resilience.idempotency_strategy"],
+          "scoring_dimensions": ["defensive_coding", "architectural_thinking"]
+        },
+        {
+          "id": "Q55",
+          "slug": "retry-logic",
+          "title": "Retry Logic",
+          "prompt": "Describe your default retry strategy for interacting with a flaky third-party API. (e.g., Exponential backoff with jitter). What is the maximum number of retries before you give up?",
+          "profile_keys": ["resilience.retry_strategy", "resilience.max_retries"],
+          "scoring_dimensions": ["defensive_coding", "pragmatism"]
+        },
+        {
+          "id": "Q56",
+          "slug": "dead-letter-queues",
+          "title": "Dead-Letter Queues (DLQ)",
+          "prompt": "When an asynchronous message fails processing and lands in a DLQ, what is your automated and manual process for handling it?",
+          "profile_keys": ["resilience.dlq_handling"],
+          "scoring_dimensions": ["defensive_coding", "experience_depth"]
+        },
+        {
+          "id": "Q57",
+          "slug": "graceful-degradation",
+          "title": "Graceful Degradation",
+          "prompt": "The primary database goes down. Instead of throwing a 500 error to the user, how do you architect the frontend/API to degrade gracefully?",
+          "profile_keys": ["resilience.degradation_strategy"],
+          "scoring_dimensions": ["defensive_coding", "architectural_thinking", "empathy"]
+        },
+        {
+          "id": "Q58",
+          "slug": "third-party-rate-limits",
+          "title": "Third-Party Rate Limits",
+          "prompt": "A crucial SaaS integration you depend on suddenly throttles your API keys. How does your system queue and throttle outgoing requests to comply dynamically?",
+          "profile_keys": ["resilience.rate_limit_handling"],
+          "scoring_dimensions": ["defensive_coding", "architectural_thinking"]
+        }
+      ]
+    },
+    {
+      "id": "XII",
+      "title": "Tooling, Environment, & Micro-Habits",
+      "purpose": "Configure the agent's workspace and operational speed.",
+      "questions": [
+        {
+          "id": "Q59",
+          "slug": "ide-philosophy",
+          "title": "IDE/Editor Philosophy",
+          "prompt": "Are you a Vim/Neovim purist, a VSCode pragmatist, or a JetBrains IDE power user? What does this choice say about your reliance on GUI vs. CLI?",
+          "profile_keys": ["tooling.ide_preference", "tooling.gui_vs_cli"],
+          "scoring_dimensions": ["pragmatism", "perfectionism"]
+        },
+        {
+          "id": "Q60",
+          "slug": "local-environment",
+          "title": "The Local Environment",
+          "prompt": "Do you run databases and services locally via Docker Compose, or do you connect to a remote 'dev' cluster?",
+          "profile_keys": ["tooling.local_env_strategy"],
+          "scoring_dimensions": ["pragmatism", "experience_depth"]
+        },
+        {
+          "id": "Q61",
+          "slug": "scripting-automations",
+          "title": "Scripting Automations",
+          "prompt": "What is a task you will immediately write a bash/Python script for, rather than doing manually twice?",
+          "profile_keys": ["tooling.automation_threshold"],
+          "scoring_dimensions": ["pragmatism", "perfectionism"]
+        },
+        {
+          "id": "Q62",
+          "slug": "mocking-vs-staging",
+          "title": "Mocking vs. Staging",
+          "prompt": "When developing locally, do you mock third-party services (like Stripe or AWS S3), or do you hit real staging endpoints? Why?",
+          "profile_keys": ["tooling.mocking_preference"],
+          "scoring_dimensions": ["testing_discipline", "pragmatism"]
+        }
+      ]
+    },
+    {
+      "id": "XIII",
+      "title": "The 'Agentic' Translation (Meta-Cognition)",
+      "purpose": "Define how the AI behaves when it reaches the limits of its cloned knowledge.",
+      "questions": [
+        {
+          "id": "Q63",
+          "slug": "confidence-intervals",
+          "title": "Confidence Intervals",
+          "prompt": "When you are asked to review a piece of code in a language or framework you only kind of know, how do you express your feedback? Do you preface it with caveats, or focus only on logical flow?",
+          "profile_keys": ["meta.uncertainty_expression"],
+          "scoring_dimensions": ["communication_clarity", "empathy"]
+        },
+        {
+          "id": "Q64",
+          "slug": "escalation-protocol",
+          "title": "The Escalation Protocol",
+          "prompt": "For an AI agent acting as you, at what exact point should the agent stop trying to auto-resolve a bug and ping the human manager? (e.g., 'If I cannot compile after 3 attempts', 'If the bug involves payment gateways').",
+          "profile_keys": ["meta.escalation_rules"],
+          "scoring_dimensions": ["risk_tolerance", "pragmatism"]
+        },
+        {
+          "id": "Q65",
+          "slug": "tone-empathy-mapping",
+          "title": "Tone and Empathy Mapping",
+          "prompt": "If an engineer deletes a production table by accident, are you clinical and focused purely on restoration, or do you offer psychological safety and reassurance first?",
+          "profile_keys": ["meta.crisis_tone"],
+          "scoring_dimensions": ["empathy", "communication_clarity"]
+        },
+        {
+          "id": "Q66",
+          "slug": "knowledge-obsolescence",
+          "title": "Knowledge Obsolescence",
+          "prompt": "How do you personally evaluate when a pattern you've used for 5 years is no longer the industry standard? What is your criteria for changing your mind?",
+          "profile_keys": ["meta.knowledge_update_criteria"],
+          "scoring_dimensions": ["novelty_seeking", "pragmatism"]
+        }
+      ]
+    },
+    {
+      "id": "XIV",
+      "title": "Scenario-Based Stress Tests",
+      "purpose": "Simulate high-pressure environments.",
+      "questions": [
+        {
+          "id": "Q67",
+          "slug": "hostile-fork",
+          "title": "The Hostile Fork",
+          "prompt": "An open-source library you depend on heavily changes its license to something incompatible with your company, and the maintainer goes rogue. Do you fork it and maintain it internally, or rewrite your system to use a competitor?",
+          "profile_keys": ["stress.hostile_fork_response"],
+          "scoring_dimensions": ["pragmatism", "risk_tolerance"]
+        },
+        {
+          "id": "Q68",
+          "slug": "ghost-bug",
+          "title": "The Ghost Bug",
+          "prompt": "A bug only happens in production, only on Tuesdays, and only for 1% of users. No logs capture it. What is your exact hypothesis-generation process?",
+          "profile_keys": ["stress.ghost_bug_methodology"],
+          "scoring_dimensions": ["debugging_methodology", "experience_depth"]
+        },
+        {
+          "id": "Q69",
+          "slug": "pm-negotiation",
+          "title": "The PM Negotiation",
+          "prompt": "Product Management wants to track 50 new granular analytics events on the frontend, which will bloat the payload and slow down the site. How do you push back while still satisfying their data needs?",
+          "profile_keys": ["stress.pm_negotiation"],
+          "scoring_dimensions": ["communication_clarity", "pragmatism"]
+        },
+        {
+          "id": "Q70",
+          "slug": "resignation-handover",
+          "title": "The Resignation Handover",
+          "prompt": "You are leaving the company in 2 weeks. You have a complex, undocumented microservice you built solo. How do you spend your last 10 working days? (This dictates how the agent generates documentation).",
+          "profile_keys": ["stress.handover_plan"],
+          "scoring_dimensions": ["documentation_priority", "communication_clarity", "empathy"]
+        }
+      ]
+    }
+  ]
+}
