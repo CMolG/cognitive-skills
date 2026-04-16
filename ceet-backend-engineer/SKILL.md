@@ -23,9 +23,9 @@ Conduct a structured interview with a backend engineer, extract the cognitive pa
 1. **Read** `interview/questions.md`. Do not dump all questions at once — ask them conversationally, grouped by theme, and dig into specifics when an answer is vague.
 2. **Extract.** As the interview progresses, keep private notes tagged by theme: `#mental-model`, `#heuristic`, `#procedure`, `#quality`, `#anti-pattern`, `#vocabulary`.
 3. **Probe contradictions.** When the person says "it depends" or gives two answers, ask *what the depending variable is*. Those are usually the most valuable heuristics.
-4. **Synthesize.** Fill in [`../_shared/templates/cognitive-clone.template.md`](../_shared/templates/cognitive-clone.template.md) using their own words wherever possible.
-5. **Activate.** Transform the clone into [`../_shared/templates/ai-environment.template.md`](../_shared/templates/ai-environment.template.md). Save both into `templates/` (the user can move/rename later).
-6. **Hand off.** Point the user at [`../_shared/prompts/activation-guide.md`](../_shared/prompts/activation-guide.md) so they can install the output in whichever AI tool they use.
+4. **Synthesize.** Fill in the role-specific `templates/cognitive-profile.md` using their own words wherever possible.
+5. **Activate.** Transform the clone into the role-specific `templates/` directory. Save both into `templates/` (the user can move/rename later).
+6. **Hand off.** Point the user at [`../docs/tool-integration.md`](../docs/tool-integration.md) so they can install the output in whichever AI tool they use.
 
 ## Backend-specific things to listen for
 

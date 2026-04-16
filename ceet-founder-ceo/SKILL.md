@@ -20,9 +20,9 @@ Interview a founder, CEO, or top executive. Produce a cognitive clone and AI env
 1. **Read** `interview/questions.md`.
 2. **Extract** themes with special attention to **how they allocate attention** — founders' scarcest resource.
 3. **Probe on recent hard calls.** Their reasoning under pressure is the core artifact.
-4. **Synthesize** into `../_shared/templates/cognitive-clone.template.md`.
-5. **Activate** into `../_shared/templates/ai-environment.template.md`. Save to `templates/`.
-6. **Hand off** via `../_shared/prompts/activation-guide.md`.
+4. **Synthesize** into the role-specific `templates/cognitive-profile.md`.
+5. **Activate** into the role-specific `templates/` directory. Save to `templates/`.
+6. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## Founder-specific things to listen for
 

@@ -19,9 +19,9 @@ Interview a UI / product designer. Produce a cognitive clone plus AI environment
 
 1. **Read** `interview/questions.md`.
 2. **Extract.** Because UI is so subjective, lean heavily on **examples**: ask them to name specific products, screens, moments they love/hate, and *why*.
-3. **Synthesize** into `../_shared/templates/cognitive-clone.template.md`.
-4. **Activate** into `../_shared/templates/ai-environment.template.md`. Save to `templates/`.
-5. **Hand off** via `../_shared/prompts/activation-guide.md`.
+3. **Synthesize** into the role-specific `templates/cognitive-profile.md`.
+4. **Activate** into the role-specific `templates/` directory. Save to `templates/`.
+5. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## UI-specific things to listen for
 

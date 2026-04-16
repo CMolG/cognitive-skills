@@ -19,4 +19,4 @@ Outputs describe *how a person reasons* about legal/compliance issues. They are 
 
 ## Installation
 
-See [`../_shared/prompts/activation-guide.md`](../_shared/prompts/activation-guide.md).
+See [`../docs/tool-integration.md`](../docs/tool-integration.md).

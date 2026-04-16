@@ -20,9 +20,9 @@ Interview a platform / infra / reliability engineer. Produce two tool-agnostic a
 1. **Read** `interview/questions.md`. Work theme by theme.
 2. **Extract.** Tag: `#mental-model`, `#heuristic`, `#procedure`, `#quality`, `#anti-pattern`, `#vocabulary`.
 3. **Ask for incident stories.** SRE judgment is overwhelmingly shaped by incidents — get 2-3 concrete ones.
-4. **Synthesize** into `../_shared/templates/cognitive-clone.template.md`.
-5. **Activate** into `../_shared/templates/ai-environment.template.md`. Save to `templates/`.
-6. **Hand off** via `../_shared/prompts/activation-guide.md`.
+4. **Synthesize** into the role-specific `templates/cognitive-profile.md`.
+5. **Activate** into the role-specific `templates/` directory. Save to `templates/`.
+6. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## SRE-specific things to listen for
 

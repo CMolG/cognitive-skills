@@ -15,4 +15,4 @@ Interview a CSM or CS leader and produce a portable AI environment that drafts o
 
 ## Installation
 
-See [`../_shared/prompts/activation-guide.md`](../_shared/prompts/activation-guide.md).
+See [`../docs/tool-integration.md`](../docs/tool-integration.md).

@@ -15,4 +15,4 @@ Interview an infrastructure / platform / reliability engineer and produce a port
 
 ## Installation
 
-See [`../_shared/prompts/activation-guide.md`](../_shared/prompts/activation-guide.md).
+See [`../docs/tool-integration.md`](../docs/tool-integration.md).

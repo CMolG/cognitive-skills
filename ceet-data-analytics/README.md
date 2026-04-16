@@ -15,4 +15,4 @@ Interview a data scientist, analytics engineer, or analyst, and produce a portab
 
 ## Installation
 
-See [`../_shared/prompts/activation-guide.md`](../_shared/prompts/activation-guide.md).
+See [`../docs/tool-integration.md`](../docs/tool-integration.md).

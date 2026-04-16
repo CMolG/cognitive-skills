@@ -20,9 +20,9 @@ Interview a marketer. Produce a cognitive clone and AI environment that reasons 
 1. **Read** `interview/questions.md`.
 2. **Extract.** Marketers often conflate *positioning* with *messaging* with *tactics* — separate them during interview.
 3. **Ask for win and loss stories.** Both teach more than theory.
-4. **Synthesize** into `../_shared/templates/cognitive-clone.template.md`.
-5. **Activate** into `../_shared/templates/ai-environment.template.md`. Save to `templates/`.
-6. **Hand off** via `../_shared/prompts/activation-guide.md`.
+4. **Synthesize** into the role-specific `templates/cognitive-profile.md`.
+5. **Activate** into the role-specific `templates/` directory. Save to `templates/`.
+6. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## Marketing-specific things to listen for
 

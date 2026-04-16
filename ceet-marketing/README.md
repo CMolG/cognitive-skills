@@ -15,4 +15,4 @@ Interview a marketer (growth, brand, demand-gen, PMM) and produce a portable AI 
 
 ## Installation
 
-See [`../_shared/prompts/activation-guide.md`](../_shared/prompts/activation-guide.md).
+See [`../docs/tool-integration.md`](../docs/tool-integration.md).

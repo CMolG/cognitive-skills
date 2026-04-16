@@ -20,9 +20,9 @@ Interview a writer (copywriter, UX writer, content designer, editorial lead). Pr
 1. **Read** `interview/questions.md`.
 2. **Extract.** Voice is best captured by contrast — ask what they *wouldn't* say, alongside what they would.
 3. **Collect exemplars.** Favorite ads, emails, landing pages, authors, and three samples of their own work they're proud of.
-4. **Synthesize** into `../_shared/templates/cognitive-clone.template.md` with special attention to the **Vocabulary & Voice** section.
-5. **Activate** into `../_shared/templates/ai-environment.template.md`. Save to `templates/`.
-6. **Hand off** via `../_shared/prompts/activation-guide.md`.
+4. **Synthesize** into the role-specific `templates/cognitive-profile.md` with special attention to the **Vocabulary & Voice** section.
+5. **Activate** into the role-specific `templates/` directory. Save to `templates/`.
+6. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## Copywriter-specific things to listen for
 

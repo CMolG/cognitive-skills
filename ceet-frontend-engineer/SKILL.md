@@ -20,9 +20,9 @@ Interview a frontend engineer and produce two tool-agnostic artifacts: a **cogni
 1. **Read** `interview/questions.md`. Walk through it conversationally, theme by theme.
 2. **Extract.** Tag answers privately: `#mental-model`, `#heuristic`, `#procedure`, `#quality`, `#anti-pattern`, `#vocabulary`, `#taste`.
 3. **Probe on taste.** Frontend has more visual/subjective judgment than backend. Ask for *examples of sites or components they love/hate* — taste is extracted more by example than by rule.
-4. **Synthesize** into [`../_shared/templates/cognitive-clone.template.md`](../_shared/templates/cognitive-clone.template.md).
-5. **Activate** into [`../_shared/templates/ai-environment.template.md`](../_shared/templates/ai-environment.template.md). Save both to `templates/`.
-6. **Hand off** via [`../_shared/prompts/activation-guide.md`](../_shared/prompts/activation-guide.md).
+4. **Synthesize** into the role-specific `templates/cognitive-profile.md`.
+5. **Activate** into the role-specific `templates/` directory. Save both to `templates/`.
+6. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## Frontend-specific things to listen for
 

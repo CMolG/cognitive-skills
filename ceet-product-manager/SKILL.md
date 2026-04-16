@@ -20,9 +20,9 @@ Interview a product manager. Produce a cognitive clone and an AI environment tha
 1. **Read** `interview/questions.md`.
 2. **Extract** themes: `#mental-model`, `#heuristic`, `#procedure`, `#quality`, `#anti-pattern`, `#vocabulary`.
 3. **Push on "no".** PM judgment is defined as much by what they *refuse* as what they approve. Get concrete examples.
-4. **Synthesize** into `../_shared/templates/cognitive-clone.template.md`.
-5. **Activate** into `../_shared/templates/ai-environment.template.md`. Save to `templates/`.
-6. **Hand off** via `../_shared/prompts/activation-guide.md`.
+4. **Synthesize** into the role-specific `templates/cognitive-profile.md`.
+5. **Activate** into the role-specific `templates/` directory. Save to `templates/`.
+6. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## PM-specific things to listen for
 

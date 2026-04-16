@@ -20,9 +20,9 @@ Interview a sales professional. Produce a cognitive clone and AI environment tha
 1. **Read** `interview/questions.md`.
 2. **Extract** themes with an eye on **discovery** (it's the most undervalued part of great selling).
 3. **Ask for deal stories** — a win, a loss, a messy one. The messy one usually reveals the most.
-4. **Synthesize** into `../_shared/templates/cognitive-clone.template.md`.
-5. **Activate** into `../_shared/templates/ai-environment.template.md`. Save to `templates/`.
-6. **Hand off** via `../_shared/prompts/activation-guide.md`.
+4. **Synthesize** into the role-specific `templates/cognitive-profile.md`.
+5. **Activate** into the role-specific `templates/` directory. Save to `templates/`.
+6. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## Sales-specific things to listen for
 

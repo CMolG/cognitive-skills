@@ -24,9 +24,9 @@ Interview an in-house legal counsel, compliance lead, DPO, or legal operations l
 1. **Read** `interview/questions.md`.
 2. **Extract** themes, with a bias toward **risk posture** — the spectrum from paranoid to business-forward.
 3. **Ask for redline examples** — how they mark up a standard DPA, MSA, or customer agreement.
-4. **Synthesize** into `../_shared/templates/cognitive-clone.template.md`.
-5. **Activate** into `../_shared/templates/ai-environment.template.md`. Save to `templates/`.
-6. **Hand off** via `../_shared/prompts/activation-guide.md`.
+4. **Synthesize** into the role-specific `templates/cognitive-profile.md`.
+5. **Activate** into the role-specific `templates/` directory. Save to `templates/`.
+6. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## Legal-specific things to listen for
 

@@ -41,7 +41,7 @@ After the interview, the AI:
 
 ### 3. Synthesize — the Cognitive Clone
 
-The core output. Schema lives in [`_shared/templates/cognitive-clone.template.md`](_shared/templates/cognitive-clone.template.md). A cognitive clone has six sections:
+The core output. Schema lives in the role-specific `templates/cognitive-profile.md`. A cognitive clone has six sections:
 
 1. **Identity & Context** — who, role, domain, stack, company shape
 2. **Mental Models** — the models they use to think (e.g. "backend is a state machine", "copy is a conversation you're interrupting")
@@ -52,9 +52,9 @@ The core output. Schema lives in [`_shared/templates/cognitive-clone.template.md
 
 ### 4. Activate — the AI Environment
 
-The cognitive clone is rewritten as a **system-prompt-ready** file: [`_shared/templates/ai-environment.template.md`](_shared/templates/ai-environment.template.md). It's tool-agnostic Markdown with a YAML header that can be dropped into any AI assistant.
+The cognitive clone is rewritten as a **system-prompt-ready** file: the role-specific `templates/` directory. It's tool-agnostic Markdown with a YAML header that can be dropped into any AI assistant.
 
-Installation snippets for each target tool live in [`_shared/prompts/activation-guide.md`](_shared/prompts/activation-guide.md).
+Installation snippets for each target tool live in [`docs/tool-integration.md`](docs/tool-integration.md).
 
 ## Design principles
 

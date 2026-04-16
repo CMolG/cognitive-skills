@@ -22,9 +22,9 @@ Interview a People leader (Head of People, People Partner, Talent leader). Produ
 1. **Read** `interview/questions.md`.
 2. **Extract** themes. Pay attention to tone — People work is high-stakes emotionally.
 3. **Probe on hard cases.** A PIP, a layoff, a complaint — these reveal real judgment.
-4. **Synthesize** into `../_shared/templates/cognitive-clone.template.md`.
-5. **Activate** into `../_shared/templates/ai-environment.template.md`. Save to `templates/`.
-6. **Hand off** via `../_shared/prompts/activation-guide.md`.
+4. **Synthesize** into the role-specific `templates/cognitive-profile.md`.
+5. **Activate** into the role-specific `templates/` directory. Save to `templates/`.
+6. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## People-Ops-specific things to listen for
 

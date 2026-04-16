@@ -15,4 +15,4 @@ Interview a UX researcher focused on user behavior and produce a portable AI env
 
 ## Installation
 
-See [`../_shared/prompts/activation-guide.md`](../_shared/prompts/activation-guide.md).
+See [`../docs/tool-integration.md`](../docs/tool-integration.md).

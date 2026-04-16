@@ -15,4 +15,4 @@ Interview a CFO, FP&A lead, or finance partner and produce a portable AI environ
 
 ## Installation
 
-See [`../_shared/prompts/activation-guide.md`](../_shared/prompts/activation-guide.md).
+See [`../docs/tool-integration.md`](../docs/tool-integration.md).

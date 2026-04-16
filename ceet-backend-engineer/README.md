@@ -23,7 +23,7 @@ Time required: **30–60 minutes** for a high-quality extraction. You can split 
 
 ## How to install the output in your AI tool
 
-See [`../_shared/prompts/activation-guide.md`](../_shared/prompts/activation-guide.md) for per-tool installation snippets (Claude Projects, ChatGPT GPTs, `.cursorrules`, `.github/copilot-instructions.md`, Gemini Gems, etc.).
+See [`../docs/tool-integration.md`](../docs/tool-integration.md) for per-tool installation snippets.
 
 ## What makes this CEET different from the others
 

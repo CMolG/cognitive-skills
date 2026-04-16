@@ -39,7 +39,7 @@ A family of role-specific **Cognitive Extraction Engines**. Each CEET is a struc
 └──────────────┘   └──────────────┘   └────────────────┘   └──────────────────┘
 ```
 
-See [`METHODOLOGY.md`](METHODOLOGY.md) for the full methodology, [`_shared/`](./_shared/) for shared templates and prompts, and each `ceet-<role>/` folder for the role-specific interview script and synthesis logic.
+See [`METHODOLOGY.md`](METHODOLOGY.md) for the full methodology and each `ceet-<role>/` folder for the role-specific interview script, synthesis logic, templates, and examples.
 
 ## Using a CEET in any AI tool
 
@@ -53,13 +53,34 @@ The outputs of every CEET are two files:
   - Gemini Gems / system prompts
   - Any other AI tool that accepts a system prompt or context file
 
-See [`_shared/prompts/activation-guide.md`](./_shared/prompts/activation-guide.md) for per-tool installation snippets.
-
 ## How to run a CEET
 
 Pick the folder that matches the role, open its `SKILL.md`, and follow it. If you're using this inside an AI tool that supports Anthropic-style skills, the skill will trigger automatically when you ask for a cognitive extraction for that role.
 
 See [`docs/how-to-use.md`](docs/how-to-use.md) for the full step-by-step guide.
+
+## Each role folder structure
+
+Every `ceet-<role>/` folder is fully self-contained:
+
+```
+ceet-<role>/
+├── README.md                     # Role overview, interview flow, output artifacts
+├── SKILL.md                      # AI-triggerable skill definition
+├── interview/
+│   └── questions.md              # Role-specific interview questions
+├── templates/                    # Role-specific artifact templates
+│   ├── agents/                   # 5 agent templates (e.g., code-reviewer, debugger)
+│   ├── skills/                   # 5–6 skill templates (e.g., style-enforcer, test-writer)
+│   ├── commands/                 # 8–10 command templates (e.g., /review, /debug)
+│   ├── rules/                    # 5–6 global rule templates (e.g., coding-standards)
+│   ├── hooks/                    # 3 hook templates (engineering roles only)
+│   └── cognitive-profile.md      # Full cognitive profile template
+└── examples/
+    └── README.md                 # How to generate and use example outputs
+```
+
+All templates use `{directives.domain.field}` placeholders that are injected from the cognitive profile during generation — zero conditional logic.
 
 ## Documentation
 
@@ -70,33 +91,7 @@ See [`docs/how-to-use.md`](docs/how-to-use.md) for the full step-by-step guide.
 | [`docs/synthesis-rules.md`](docs/synthesis-rules.md) | 12 strict rules for converting interview responses to cognitive profiles |
 | [`docs/tool-integration.md`](docs/tool-integration.md) | How to load outputs into Claude, ChatGPT, Cursor, Copilot, Gemini, and more |
 | [`docs/extending.md`](docs/extending.md) | How to add a new role pack to the toolkit |
-| [`_shared/universal-questions.md`](_shared/universal-questions.md) | 15 universal questions asked for every role before role-specific questions |
-
-## Shared infrastructure
-
-```
-_shared/
-├── templates/
-│   ├── cognitive-clone.template.md      # Cognitive clone output schema (8 sections)
-│   ├── ai-environment.template.md       # System-prompt-ready environment template
-│   ├── cognitive-profile-output.template.md  # Human-readable profile template
-│   ├── agent.template.md                # Generic agent artifact template
-│   ├── skill.template.md                # Generic skill artifact template
-│   ├── command.template.md              # Generic command artifact template
-│   ├── hook.template.md                 # Generic hook artifact template (engineering only)
-│   ├── rule.template.md                 # Generic global rule template
-│   └── source-map.template.md           # Traceability matrix template
-├── prompts/
-│   └── activation-guide.md              # Per-tool installation snippets
-├── schemas/
-│   ├── profile-schema.json              # JSON Schema for cognitive profiles
-│   ├── directive-domains-backend.json   # Backend engineer directive domain mapping
-│   └── directive-domains-frontend.json  # Frontend engineer directive domain mapping
-└── universal-questions.md               # 15 cross-role identity questions (U01–U15)
-```
 
 ## Project status
 
 This toolkit is under active construction. Each CEET folder is self-contained and will become a standalone skill package.
-
-The [`_legacy/ceet/`](_legacy/ceet/) directory preserves the original single-role (backend engineer) prototype that this toolkit evolved from — including its 30 fully-developed artifact templates, 70-question bank, and Copilot skill file.

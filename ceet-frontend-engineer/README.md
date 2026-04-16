@@ -19,4 +19,4 @@ This CEET doesn't assume React, Vue, Svelte, Solid, or anything else. The interv
 
 ## How to install the output
 
-See [`../_shared/prompts/activation-guide.md`](../_shared/prompts/activation-guide.md).
+See [`../docs/tool-integration.md`](../docs/tool-integration.md).

@@ -20,9 +20,9 @@ Interview a data person (data scientist, analytics engineer, analyst, ML practit
 1. **Read** `interview/questions.md`.
 2. **Extract.** Tag themes. Pay special attention to how they separate *descriptive / diagnostic / predictive / prescriptive* thinking.
 3. **Ask for real analyses.** Have them walk through a recent analysis end-to-end — the choices they made, the ones they rejected.
-4. **Synthesize** into `../_shared/templates/cognitive-clone.template.md`.
-5. **Activate** into `../_shared/templates/ai-environment.template.md`. Save to `templates/`.
-6. **Hand off** via `../_shared/prompts/activation-guide.md`.
+4. **Synthesize** into the role-specific `templates/cognitive-profile.md`.
+5. **Activate** into the role-specific `templates/` directory. Save to `templates/`.
+6. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## Data-specific things to listen for
 

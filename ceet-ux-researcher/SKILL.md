@@ -22,9 +22,9 @@ Interview a UX / behavioral researcher. Produce a cognitive clone plus an AI env
 1. **Read** `interview/questions.md`.
 2. **Extract** themes, with a bias toward **craft detail** — this is a craft-heavy role.
 3. **Probe on synthesis.** The hardest-to-capture judgment is how they move from raw notes to a claim. Have them narrate a recent synthesis end-to-end.
-4. **Synthesize** into `../_shared/templates/cognitive-clone.template.md`.
-5. **Activate** into `../_shared/templates/ai-environment.template.md`. Save to `templates/`.
-6. **Hand off** via `../_shared/prompts/activation-guide.md`.
+4. **Synthesize** into the role-specific `templates/cognitive-profile.md`.
+5. **Activate** into the role-specific `templates/` directory. Save to `templates/`.
+6. **Hand off** via [`../docs/tool-integration.md`](../docs/tool-integration.md).
 
 ## UXR-specific things to listen for
 
