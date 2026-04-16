@@ -1,0 +1,147 @@
+{
+  "role": "frontend-engineer",
+  "version": "1.0.0",
+  "directive_domains": {
+    "component_design": { "fields": {
+      "extraction_rule": { "sourced_from": ["C01"] },
+      "composition_style": { "sourced_from": ["C02"] },
+      "control_pattern": { "sourced_from": ["C03"] },
+      "prop_drilling_limit": { "sourced_from": ["C04"] },
+      "container_split": { "sourced_from": ["C05"] },
+      "api_style": { "sourced_from": ["C06"] }
+    }},
+    "state_management": { "fields": {
+      "boundary": { "sourced_from": ["C07"] },
+      "server_state": { "sourced_from": ["C08"] },
+      "derived_state": { "sourced_from": ["C09"] },
+      "form_state": { "sourced_from": ["C10"] },
+      "url_state": { "sourced_from": ["C11"] }
+    }},
+    "rendering": { "fields": {
+      "memoization_stance": { "sourced_from": ["C12"] },
+      "diagnosis_workflow": { "sourced_from": ["C13"] },
+      "virtualization_rules": { "sourced_from": ["C14"] },
+      "concurrent_usage": { "sourced_from": ["C15"] },
+      "optimization_example": { "sourced_from": ["C16"] }
+    }},
+    "styling": { "fields": {
+      "methodology": { "sourced_from": ["C17"] },
+      "token_discipline": { "sourced_from": ["C18"] },
+      "responsive_rules": { "sourced_from": ["C19"] },
+      "dark_mode_approach": { "sourced_from": ["C20"] },
+      "cascade_discipline": { "sourced_from": ["C21"] }
+    }},
+    "accessibility": { "fields": {
+      "keyboard_baseline": { "sourced_from": ["C22"] },
+      "screen_reader_practice": { "sourced_from": ["C23"] },
+      "aria_discipline": { "sourced_from": ["C24"] },
+      "color_rules": { "sourced_from": ["C25"] },
+      "motion_rules": { "sourced_from": ["C26"] }
+    }},
+    "typing": { "fields": {
+      "strictness": { "sourced_from": ["C27"] },
+      "component_patterns": { "sourced_from": ["C28"] },
+      "event_handlers": { "sourced_from": ["C29"] },
+      "any_policy": { "sourced_from": ["C30"] }
+    }},
+    "forms": { "fields": {
+      "validation_timing": { "sourced_from": ["C31"] },
+      "error_voice": { "sourced_from": ["C32"] },
+      "loading_strategy": { "sourced_from": ["C33"] },
+      "optimistic_stance": { "sourced_from": ["C34"] },
+      "destructive_action_pattern": { "sourced_from": ["C35"] }
+    }},
+    "testing": { "fields": {
+      "component_philosophy": { "sourced_from": ["C36"] },
+      "e2e_coverage": { "sourced_from": ["C37"] },
+      "visual_regression": { "sourced_from": ["C38"] },
+      "mocking_strategy": { "sourced_from": ["C39"] },
+      "storybook_rules": { "sourced_from": ["C40"] }
+    }},
+    "design_system": { "fields": {
+      "consumption": { "sourced_from": ["E01"] },
+      "variant_api": { "sourced_from": ["E02"] },
+      "theme_architecture": { "sourced_from": ["E03"] },
+      "breaking_change_policy": { "sourced_from": ["E04"] },
+      "handoff_requirements": { "sourced_from": ["E05"] }
+    }},
+    "animation": { "fields": {
+      "library_choice": { "sourced_from": ["E06"] },
+      "principles": { "sourced_from": ["E07"] },
+      "layout_transitions": { "sourced_from": ["E08"] },
+      "performance_rules": { "sourced_from": ["E09"] }
+    }},
+    "performance": { "fields": {
+      "bundle_budget": { "sourced_from": ["E10"] },
+      "code_splitting": { "sourced_from": ["E11"] },
+      "image_strategy": { "sourced_from": ["E12"] },
+      "web_vitals_targets": { "sourced_from": ["E13"] },
+      "font_loading": { "sourced_from": ["E14"] }
+    }},
+    "compat": { "fields": {
+      "support_matrix": { "sourced_from": ["E15"] },
+      "progressive_enhancement": { "sourced_from": ["E16"] },
+      "feature_detection": { "sourced_from": ["E17"] },
+      "polyfill_policy": { "sourced_from": ["E18"] }
+    }},
+    "framework": { "fields": {
+      "opinion": { "sourced_from": ["E19"] },
+      "rendering_strategy": { "sourced_from": ["E20"] },
+      "meta_framework": { "sourced_from": ["E21"] },
+      "server_components": { "sourced_from": ["E22"] },
+      "hooks_discipline": { "sourced_from": ["E23"] },
+      "boundary_placement": { "sourced_from": ["E24"] }
+    }},
+    "meta_cognition": { "fields": {
+      "uncertainty_voice": { "sourced_from": ["E25", "U08"] },
+      "escalation_protocol": { "sourced_from": ["E26"] },
+      "crisis_personality": { "sourced_from": ["E27", "U14"] },
+      "knowledge_evolution": { "sourced_from": ["E28", "U13"] },
+      "design_collaboration": { "sourced_from": ["E29"] },
+      "self_awareness": { "sourced_from": ["E30", "U15"] }
+    }}
+  },
+  "artifacts": {
+    "agents": [
+      { "name": "component-reviewer", "consumes_directives": ["component_design.*", "typing.*", "accessibility.*"] },
+      { "name": "a11y-auditor", "consumes_directives": ["accessibility.*"] },
+      { "name": "performance-analyst", "consumes_directives": ["rendering.*", "performance.*"] },
+      { "name": "pair-programmer", "consumes_directives": ["component_design.*", "state_management.*", "typing.*", "styling.*"] },
+      { "name": "design-system-consumer", "consumes_directives": ["design_system.*", "styling.*"] }
+    ],
+    "skills": [
+      { "name": "component-builder", "consumes_directives": ["component_design.*", "typing.*"] },
+      { "name": "state-architect", "consumes_directives": ["state_management.*"] },
+      { "name": "styling-enforcer", "consumes_directives": ["styling.*"] },
+      { "name": "accessibility-checker", "consumes_directives": ["accessibility.*"] },
+      { "name": "form-designer", "consumes_directives": ["forms.*", "accessibility.keyboard_baseline"] },
+      { "name": "test-writer", "consumes_directives": ["testing.*"] }
+    ],
+    "commands": [
+      { "name": "component", "consumes_directives": ["component_design.*", "styling.*", "accessibility.*"] },
+      { "name": "review", "consumes_directives": ["component_design.*", "typing.*", "accessibility.*"] },
+      { "name": "a11y", "consumes_directives": ["accessibility.*"] },
+      { "name": "profile-render", "consumes_directives": ["rendering.*", "performance.*"] },
+      { "name": "form", "consumes_directives": ["forms.*", "accessibility.*"] },
+      { "name": "test", "consumes_directives": ["testing.*"] },
+      { "name": "refactor", "consumes_directives": ["component_design.*", "styling.*"] }
+    ],
+    "rules": [
+      { "name": "component-standards", "consumes_directives": ["component_design.*", "typing.*"] },
+      { "name": "state-management-policy", "consumes_directives": ["state_management.*"] },
+      { "name": "accessibility-baseline", "consumes_directives": ["accessibility.*"] },
+      { "name": "styling-conventions", "consumes_directives": ["styling.*"] },
+      { "name": "testing-policy", "consumes_directives": ["testing.*"] }
+    ],
+    "hooks": [
+      { "name": "pre-commit", "consumes_directives": ["typing.*", "styling.methodology"] },
+      { "name": "pre-push", "consumes_directives": ["testing.*", "performance.bundle_budget"] }
+    ]
+  },
+  "composite_scores": [
+    "component_rigor", "accessibility_paranoia", "performance_obsession", "typing_rigidity",
+    "design_empathy", "test_discipline", "pragmatism", "novelty_seeking",
+    "bundle_consciousness", "animation_taste", "ux_microdecision_depth", "framework_conviction",
+    "communication_clarity", "risk_tolerance"
+  ]
+}

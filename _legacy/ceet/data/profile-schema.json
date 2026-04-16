@@ -1,0 +1,272 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CEET Individual Cognitive Profile",
+  "description": "A cognitive clone of a specific engineer — not a classification, but a faithful reproduction of how one person thinks, codes, argues, and decides.",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "engineer_name": { "type": "string" },
+        "date_completed": { "type": "string", "format": "date-time" },
+        "version": { "type": "string", "default": "1.0.0" },
+        "questions_answered": { "type": "integer", "maximum": 70 },
+        "interview_duration_minutes": { "type": "integer" },
+        "profile_hash": { "type": "string", "description": "SHA-256 of raw_responses for change detection" }
+      },
+      "required": ["engineer_name", "date_completed"]
+    },
+
+    "identity": {
+      "type": "object",
+      "description": "The engineer's core identity — synthesized from all 70 answers, written as a first-person internal monologue that captures HOW this person thinks.",
+      "properties": {
+        "cognitive_signature": {
+          "type": "string",
+          "description": "A 2-3 paragraph first-person narrative capturing this engineer's unique way of thinking about software. Not a label — a voice. Written as if the engineer is explaining themselves to a future AI clone."
+        },
+        "core_values": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "The 3-5 non-negotiable principles this engineer lives by, extracted from patterns across all answers. Each value includes the engineer's own justification."
+        },
+        "decision_framework": {
+          "type": "string",
+          "description": "How this engineer weighs trade-offs. Not 'pragmatic vs perfectionist' — the actual internal calculus they described across Q04, Q16, Q24, Q25, Q30, Q33, Q67."
+        },
+        "communication_voice": {
+          "type": "string",
+          "description": "How this engineer communicates — tone, formality, directness, humor. Derived from Q23 (mentoring example), Q24 (negotiation), Q65 (crisis tone), Q15 (commit messages)."
+        },
+        "frustration_triggers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Specific things that make this engineer push back hard. From Q26 and patterns across all answers."
+        },
+        "blind_spots": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Areas where this engineer's answers reveal gaps or contradictions they may not see themselves. Synthesized, not self-reported."
+        },
+        "contradictions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "tension": { "type": "string" },
+              "question_a": { "type": "string" },
+              "question_b": { "type": "string" },
+              "resolution": { "type": "string" }
+            }
+          },
+          "description": "Places where the engineer's answers conflict with each other. These are VALUABLE — they reveal context-dependent thinking."
+        }
+      }
+    },
+
+    "raw_responses": {
+      "type": "object",
+      "description": "Every answer to every question, stored verbatim. This is the ground truth.",
+      "patternProperties": {
+        "^Q[0-9]{2}$": {
+          "type": "object",
+          "properties": {
+            "question_id": { "type": "string" },
+            "response": { "type": "string", "description": "The engineer's exact words" },
+            "follow_up_responses": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Any follow-up clarifications"
+            },
+            "key_extractions": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Specific rules, thresholds, or examples the engineer stated"
+            }
+          }
+        }
+      }
+    },
+
+    "directives": {
+      "type": "object",
+      "description": "Behavioral instructions synthesized from raw responses. These are written in the engineer's voice and injected directly into templates. NO conditional logic — each directive is a complete, self-contained instruction.",
+      "properties": {
+        "code_review": {
+          "type": "object",
+          "properties": {
+            "philosophy": { "type": "string", "description": "How this person reviews code — in their own words. Synthesized from Q21-Q24, Q25, Q26." },
+            "blocking_criteria": { "type": "string", "description": "What specifically makes this person block a PR. Their exact standards." },
+            "nitpick_policy": { "type": "string", "description": "Their exact policy on style issues — not 'block/approve/ignore' but their nuanced approach." },
+            "mentoring_voice": { "type": "string", "description": "How they give feedback to less experienced engineers. Includes their actual example from Q23." },
+            "pr_size_policy": { "type": "string", "description": "Their specific limit and what they do when it's exceeded." },
+            "refactoring_stance": { "type": "string", "description": "Their exact policy on refactoring adjacent code, from Q16." }
+          }
+        },
+        "coding_style": {
+          "type": "object",
+          "properties": {
+            "typing_rules": { "type": "string", "description": "Their complete typing philosophy — not 'strict' or 'loose' but their specific rules, exceptions, and justification." },
+            "naming_rules": { "type": "string", "description": "Their exact naming conventions with their own examples for booleans, arrays, async functions, and any other patterns they mentioned." },
+            "error_handling_rules": { "type": "string", "description": "Their complete error handling approach — what they use, when, why, and the specific patterns they follow." },
+            "file_organization_rules": { "type": "string", "description": "Their exact repo structure, with their reasoning and any exceptions." },
+            "commenting_rules": { "type": "string", "description": "Their precise rule for when to comment vs when to refactor, from Q10." },
+            "paradigm_rules": { "type": "string", "description": "Their OOP vs FP stance with their specific boundary conditions, from Q11." }
+          }
+        },
+        "architecture": {
+          "type": "object",
+          "properties": {
+            "persistence_philosophy": { "type": "string", "description": "Their default data persistence choice and all deviation triggers, from Q01." },
+            "decomposition_philosophy": { "type": "string", "description": "Their complete stance on monolith vs microservices including specific thresholds, from Q02." },
+            "state_management_rules": { "type": "string", "description": "Their state management approach and mutation rules, from Q03." },
+            "build_vs_buy_rules": { "type": "string", "description": "Their complete criteria for build vs buy decisions, from Q04." },
+            "concurrency_rules": { "type": "string", "description": "Their concurrency model and race condition prevention strategies, from Q05." }
+          }
+        },
+        "testing": {
+          "type": "object",
+          "properties": {
+            "tdd_reality": { "type": "string", "description": "Their honest TDD practice — not the ideal, the reality. From Q12." },
+            "test_priority_rationale": { "type": "string", "description": "Which test type they prioritize and WHY — their full reasoning, from Q13." },
+            "mocking_philosophy": { "type": "string", "description": "Their exact approach to mocking vs staging, from Q62." },
+            "coverage_expectations": { "type": "string", "description": "What they actually expect in terms of test coverage — inferred from testing answers." }
+          }
+        },
+        "debugging": {
+          "type": "object",
+          "properties": {
+            "silent_failure_protocol": { "type": "string", "description": "Their exact step-by-step diagnostic process, from Q17." },
+            "logging_philosophy": { "type": "string", "description": "Their complete logging rules — what goes in each level, what they always/never log. From Q18." },
+            "rca_process": { "type": "string", "description": "Their post-incident prevention process, from Q19." },
+            "dependency_resolution": { "type": "string", "description": "How they resolve dependency hell, from Q20." },
+            "ghost_bug_methodology": { "type": "string", "description": "Their hypothesis-generation process for unreproducible bugs, from Q68." }
+          }
+        },
+        "security": {
+          "type": "object",
+          "properties": {
+            "zero_trust_stance": { "type": "string", "description": "Their complete position on internal service auth, from Q31." },
+            "secret_management_rules": { "type": "string", "description": "Their ideal secret workflow and .env threshold, from Q32." },
+            "cve_response_plan": { "type": "string", "description": "Their exact response to unpatched CVEs, from Q33." },
+            "validation_philosophy": { "type": "string", "description": "Where they put validation and whether they duplicate, from Q34." },
+            "web_security_defaults": { "type": "string", "description": "Their CSRF/XSS prevention muscle memory, from Q35." },
+            "cryptography_defaults": { "type": "string", "description": "Their hashing algorithm, cost factor, and reasoning, from Q36." }
+          }
+        },
+        "performance": {
+          "type": "object",
+          "properties": {
+            "latency_standards": { "type": "string", "description": "Their specific latency thresholds and profiling trigger, from Q37." },
+            "memory_leak_playbook": { "type": "string", "description": "Their exact toolset and sequence for finding memory leaks, from Q38." },
+            "caching_rules": { "type": "string", "description": "Their caching strategy and staleness prevention approach, from Q39." },
+            "n_plus_one_prevention": { "type": "string", "description": "Their approach to preventing N+1 queries, from Q40." },
+            "gc_philosophy": { "type": "string", "description": "Their GC awareness level and specific practices, from Q41." },
+            "frontend_render_rules": { "type": "string", "description": "Their methodology for preventing unnecessary re-renders, from Q42." }
+          }
+        },
+        "database": {
+          "type": "object",
+          "properties": {
+            "consistency_philosophy": { "type": "string", "description": "Their ACID vs BASE stance with UI handling, from Q43." },
+            "indexing_instincts": { "type": "string", "description": "What they index by default, from Q44." },
+            "migration_playbook": { "type": "string", "description": "Their exact zero-downtime migration sequence, from Q45." },
+            "orm_threshold": { "type": "string", "description": "When they abandon the ORM, from Q46." },
+            "partitioning_rules": { "type": "string", "description": "Their partitioning strategy and thresholds, from Q47." },
+            "time_and_money_rules": { "type": "string", "description": "Their unyielding rules for currency and timestamps, from Q48." }
+          }
+        },
+        "infrastructure": {
+          "type": "object",
+          "properties": {
+            "ideal_pipeline": { "type": "string", "description": "Their complete CI/CD pipeline description, from Q49." },
+            "deployment_philosophy": { "type": "string", "description": "Their deployment strategy preferences and reasoning, from Q50." },
+            "iac_stance": { "type": "string", "description": "Their IaC tool choice and justification, from Q51." },
+            "alerting_rules": { "type": "string", "description": "Their exact pageable vs warning criteria, from Q52." },
+            "ephemeral_env_policy": { "type": "string", "description": "Their stance on preview environments, from Q53." }
+          }
+        },
+        "resilience": {
+          "type": "object",
+          "properties": {
+            "idempotency_approach": { "type": "string", "description": "Their strategy for handling duplicate requests, from Q54." },
+            "retry_strategy": { "type": "string", "description": "Their exact retry logic including max retries, from Q55." },
+            "dlq_handling": { "type": "string", "description": "Their dead-letter queue process, from Q56." },
+            "graceful_degradation": { "type": "string", "description": "Their approach when primary systems fail, from Q57." },
+            "rate_limit_adaptation": { "type": "string", "description": "How their system adapts to third-party throttling, from Q58." }
+          }
+        },
+        "tooling": {
+          "type": "object",
+          "properties": {
+            "editor_philosophy": { "type": "string", "description": "Their IDE choice and what it says about them, from Q59." },
+            "local_environment": { "type": "string", "description": "Their local dev setup approach, from Q60." },
+            "automation_instincts": { "type": "string", "description": "What they automate immediately vs tolerate manually, from Q61." },
+            "mocking_vs_staging": { "type": "string", "description": "Their approach to local third-party integrations, from Q62." }
+          }
+        },
+        "meta_cognition": {
+          "type": "object",
+          "properties": {
+            "uncertainty_voice": { "type": "string", "description": "How they express doubt and partial knowledge, from Q63." },
+            "escalation_protocol": { "type": "string", "description": "Exact rules for when the AI should stop and ask the human, from Q64." },
+            "crisis_personality": { "type": "string", "description": "Their actual crisis communication style, from Q65." },
+            "knowledge_evolution": { "type": "string", "description": "How they decide to abandon old patterns, from Q66." }
+          }
+        },
+        "stress_responses": {
+          "type": "object",
+          "properties": {
+            "hostile_fork_strategy": { "type": "string", "description": "Fork and maintain vs rewrite, from Q67." },
+            "ghost_bug_approach": { "type": "string", "description": "Their hypothesis generation for unreproducible bugs, from Q68." },
+            "pm_pushback_style": { "type": "string", "description": "How they negotiate with product on technical debt, from Q69." },
+            "handover_plan": { "type": "string", "description": "Their exact 10-day handover plan, from Q70." }
+          }
+        },
+        "git_workflow": {
+          "type": "object",
+          "properties": {
+            "branching_strategy": { "type": "string", "description": "Their preferred git workflow, from Q14." },
+            "commit_message_format": { "type": "string", "description": "Their exact commit message format with example, from Q15." },
+            "commit_message_example": { "type": "string", "description": "The actual example they wrote for the payment NPE fix." }
+          }
+        },
+        "personality": {
+          "type": "object",
+          "properties": {
+            "quality_calibration": { "type": "string", "description": "Their self-reported perfectionism level AND the context they gave for it, from Q25." },
+            "primary_frustration": { "type": "string", "description": "What frustrates them most and why, from Q26." },
+            "novelty_stance": { "type": "string", "description": "Their relationship with new tech — early adopter, skeptic, or their specific nuance, from Q27." },
+            "focus_preference": { "type": "string", "description": "How they prefer to structure their workday, from Q28." },
+            "flow_state_description": { "type": "string", "description": "Their internal dialogue during deep focus, from Q29." },
+            "legacy_code_empathy": { "type": "string", "description": "How they view and approach legacy code, from Q30." }
+          }
+        }
+      }
+    },
+
+    "composite_scores": {
+      "type": "object",
+      "description": "METADATA ONLY — These scores summarize patterns for radar-chart visualization. They do NOT drive any template behavior. All behavior is driven by directives.",
+      "properties": {
+        "perfectionism": { "type": "number", "minimum": 1, "maximum": 10 },
+        "pragmatism": { "type": "number", "minimum": 1, "maximum": 10 },
+        "security_paranoia": { "type": "number", "minimum": 1, "maximum": 10 },
+        "performance_obsession": { "type": "number", "minimum": 1, "maximum": 10 },
+        "testing_discipline": { "type": "number", "minimum": 1, "maximum": 10 },
+        "defensive_coding": { "type": "number", "minimum": 1, "maximum": 10 },
+        "communication_clarity": { "type": "number", "minimum": 1, "maximum": 10 },
+        "experience_depth": { "type": "number", "minimum": 1, "maximum": 10 },
+        "risk_tolerance": { "type": "number", "minimum": 1, "maximum": 10 },
+        "novelty_seeking": { "type": "number", "minimum": 1, "maximum": 10 },
+        "empathy": { "type": "number", "minimum": 1, "maximum": 10 },
+        "documentation_priority": { "type": "number", "minimum": 1, "maximum": 10 },
+        "functional_preference": { "type": "number", "minimum": 1, "maximum": 10 },
+        "typing_rigidity": { "type": "number", "minimum": 1, "maximum": 10 },
+        "debugging_methodology": { "type": "number", "minimum": 1, "maximum": 10 },
+        "architectural_thinking": { "type": "number", "minimum": 1, "maximum": 10 }
+      }
+    }
+  },
+  "required": ["meta", "identity", "raw_responses", "directives"]
+}
