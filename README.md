@@ -29,6 +29,12 @@ A family of role-specific **Cognitive Extraction Engines**. Each CEET is a struc
 | [`ceet-people-ops`](ceet-people-ops/) | People Ops / HR | Hiring, performance, culture, policy design |
 | [`ceet-founder-ceo`](ceet-founder-ceo/) | Founder / CEO | Strategy, capital, narrative, org design |
 
+## Independent skills
+
+| Folder | Purpose |
+|---|---|
+| [`impersonator`](impersonator/) | Initialize any CEET role with a simulated draft pack inferred from public-figure evidence or repository-author commit/code history (no interview). |
+
 ## The shared loop (every CEET follows this)
 
 ```
@@ -91,6 +97,7 @@ All templates use `{directives.domain.field}` placeholders that are injected fro
 | [`docs/synthesis-rules.md`](docs/synthesis-rules.md) | 12 strict rules for converting interview responses to cognitive profiles |
 | [`docs/tool-integration.md`](docs/tool-integration.md) | How to load outputs into Claude, ChatGPT, Cursor, Copilot, Gemini, and more |
 | [`docs/extending.md`](docs/extending.md) | How to add a new role pack to the toolkit |
+| [`impersonator/README.md`](impersonator/README.md) | Independent non-interview skill for simulated CEET initialization |
 
 ## Project status
 
