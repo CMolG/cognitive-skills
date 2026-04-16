@@ -20,6 +20,7 @@ Required:
 
 1. `target_role` — one of the existing `ceet-*` folders.
 2. `mode` — `public_figure` or `repo_author`.
+3. `output_slug` — short kebab-case identifier for the output folder (e.g., `backend-netflix-tech-blog`).
 
 Mode-specific:
 
@@ -35,7 +36,7 @@ Every generated file MUST include this banner near the top:
 ## Run order
 
 1. **Validate role.** Confirm `target_role` exists and contains `templates/`.
-2. **Load directive structure.** Parse `ceet-<role>/templates/cognitive-profile.md` to detect expected `{directives.domain.field}` keys.
+2. **Load directive structure.** Parse `ceet-<role>/templates/cognitive-profile.md` to detect expected `{directives.domain.field}` keys and enumerate every template file under `ceet-<role>/templates/` (agents, skills, commands, rules, hooks).
 3. **Collect evidence.**
    - `public_figure`: documented speeches, interviews, writing, public decisions.
    - `repo_author`: commit messages, diffs, authored files, review footprint (if available).
@@ -50,10 +51,11 @@ Every generated file MUST include this banner near the top:
    - `commands/*`
    - `rules/*`
    - `hooks/*` (if role has hooks)
-7. **Write output under examples, not canonical templates:**
-   - `ceet-<role>/examples/impersonations/<subject-slug>/`
-8. **Attach provenance index** in the output folder:
+7. **Write output under the top-level `examples/ready-to-use/` folder**, not inside the canonical role templates:
+   - `examples/ready-to-use/<output-slug>/`
+8. **Attach provenance artifacts** in the output folder:
    - `evidence-map.md` listing every populated directive with source rationale and confidence.
+   - `README.md` explaining what's in the pack and how to copy it into Claude / ChatGPT / Cursor / Copilot / etc.
 
 ## Mapping rules
 
@@ -74,7 +76,8 @@ Every generated file MUST include this banner near the top:
 
 A run is complete only when:
 
-1. Full target-role artifact set is generated in `examples/impersonations/<subject-slug>/`.
+1. Full target-role artifact set is generated in `examples/ready-to-use/<output-slug>/`.
 2. Every file contains the Simulation Notice.
 3. `evidence-map.md` exists and covers all populated directive fields.
-4. Unknown/low-confidence areas are explicit.
+4. `README.md` documents the pack and how to use it in any AI tool.
+5. Unknown/low-confidence areas are explicit.

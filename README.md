@@ -9,6 +9,42 @@ A family of role-specific **Cognitive Extraction Engines**. Each CEET is a struc
 
 > CEETs produce **tool-agnostic outputs**. The generated cognitive clone and AI environment work in Claude, ChatGPT, Cursor, Copilot, Gemini, Perplexity, or any other AI tool — because the artifacts are plain Markdown + YAML, not wrapped in any vendor's proprietary format.
 
+## Try it instantly (No installation required)
+
+Use the ready-to-use pack at [`examples/ready-to-use/backend-netflix-tech-blog/`](examples/ready-to-use/backend-netflix-tech-blog/).
+
+1. Copy [`cognitive-profile.md`](examples/ready-to-use/backend-netflix-tech-blog/cognitive-profile.md) from that folder.
+2. Paste it into your Cursor project rules, Claude project instructions, or any AI tool's system prompt.
+3. Ask: **"Review this pull request for a database migration."**
+
+> This pack is **`backend-netflix-tech-blog`**, a simulation built from publicly available Netflix engineering materials (Netflix Tech Blog / public talks). It is a study/demo artifact, not a first-person interview profile. Full provenance is in the pack's [`evidence-map.md`](examples/ready-to-use/backend-netflix-tech-blog/evidence-map.md).
+
+## Quick Start
+
+```bash
+git clone https://github.com/CMolG/cognitive-skills.git
+cd cognitive-skills
+```
+
+Then either:
+
+1. **Use the ready-to-use pack directly** — open `examples/ready-to-use/backend-netflix-tech-blog/` and copy the files you need into your AI tool.
+2. **Generate a new pack via the `impersonator` skill** — point any skill-aware AI assistant at [`impersonator/SKILL.md`](impersonator/SKILL.md) and ask it to build a pack for your chosen target role + subject (public figure or repo author). Output lands in `examples/ready-to-use/<your-slug>/`.
+3. **Run a full CEET interview** for any of the 15 roles — open the role's `SKILL.md` and follow the interview flow for a first-person cognitive clone.
+
+## Before and After: Base model vs CEET pack
+
+**Prompt used in both cases:**
+
+> "Review this pull request for a database migration that renames `users.email` to `users.primary_email`, backfills data, and adds a unique index."
+
+| Base model (generic) | CEET pack (backend-netflix-tech-blog) |
+|---|---|
+| Recommends adding tests and checking migration rollback. | Breaks migration into expand/contract phases and explicitly asks for dual-write windows before rename cutover. |
+| Mentions performance and downtime in general terms. | Calls out index build strategy, lock behavior, query plan verification, and rollback toggles under active traffic. |
+| Suggests validating data after migration. | Requests invariant checks (`null`, duplicate, stale writer paths), replay safety, and observability signals for each phase. |
+| Gives a broad checklist. | Prioritizes blast radius controls: canary rollout, feature flags, and explicit fail-fast criteria tied to SLO/error budget impact. |
+
 ## The 15 roles
 
 | Folder | Role | Focus |
