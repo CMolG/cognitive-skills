@@ -10,130 +10,130 @@ A family of role-specific **Cognitive Extraction Engines**. Each CEET is a struc
 > CEETs produce **tool-agnostic outputs**. The generated cognitive clone and AI environment work in Claude, ChatGPT, Cursor, Copilot, Gemini, Perplexity, or any other AI tool — because the artifacts are plain Markdown + YAML, not wrapped in any vendor's proprietary format.
 
 
-## Novedades destacadas
+## Featured updates
 
-- **Pack listo para usar sin instalación**: `backend-netflix-tech-blog` para probar el enfoque CEET en minutos.
-- **Skill independiente `impersonator`**: genera borradores simulados de packs CEET a partir de evidencia pública o historial de repositorios.
-- **Cobertura de 15 roles profesionales** con scripts de entrevista, plantillas y ejemplos por rol.
-- **Artefactos portables y agnósticos del proveedor** (`cognitive-clone.md` + `ai-environment.md`) para reutilizar en Claude, ChatGPT, Cursor, Copilot, Gemini y más.
+- **Ready-to-use pack with no installation**: `backend-netflix-tech-blog` to try the CEET approach in minutes.
+- **Standalone skill `impersonator`**: generates simulated drafts of CEET packs from public evidence or repository history.
+- **Coverage for 15 professional roles** with interview scripts, templates, and examples per role.
+- **Portable provider-agnostic artifacts** (`cognitive-clone.md` + `ai-environment.md`) for reuse in Claude, ChatGPT, Cursor, Copilot, Gemini, and more.
 
-## Guía de uso visual de SKILLS
+## Visual usage guide for SKILLS
 
-> Cada skill tiene su propia subsección con un icono Material distinto, descripción, público objetivo y ejemplos de uso.
+> Each skill has its own subsection with a distinct Material icon, description, target audience, and usage examples.
 
 ### ![hub](https://fonts.gstatic.com/s/i/materialicons/hub/v12/24px.svg) autodiscover
-**Qué hace**: Descubre y enruta automáticamente flujos/skills según la tarea.  
-**Enfocada a**: Usuarios que quieren reducir selección manual de skills.
-- `Analiza este objetivo y dime qué skill conviene ejecutar primero.`
-- `Rutea esta petición al flujo correcto sin que yo elija rol.`
+**What it does**: Discovers and automatically routes flows/skills according to the task.  
+**Focused on**: Users who want to reduce manual skill selection.
+- `Analyze this objective and tell me which skill should run first.`
+- `Route this request to the correct flow without me choosing a role.`
 
 ### ![storage](https://fonts.gstatic.com/s/i/materialicons/storage/v10/24px.svg) ceet-backend-engineer
-**Qué hace**: Extracción cognitiva para ingeniería backend (datos, APIs, invariantes).  
-**Enfocada a**: Backend engineers y reviewers técnicos.
-- `Genera un perfil cognitivo backend a partir de entrevista.`
-- `Activa un entorno AI para revisar migraciones y contratos API.`
+**What it does**: Cognitive extraction for backend engineering (data, APIs, invariants).  
+**Focused on**: Backend engineers and technical reviewers.
+- `Generate a backend cognitive profile from an interview.`
+- `Activate an AI environment to review migrations and API contracts.`
 
 ### ![brush](https://fonts.gstatic.com/s/i/materialicons/brush/v15/24px.svg) ceet-copywriter
-**Qué hace**: Captura criterios de copy (voz, estructura, conversión).  
-**Enfocada a**: Copywriters y equipos de contenido/brand.
-- `Extrae mis reglas de tono para landings B2B.`
-- `Crea prompts para reescritura con voz de marca.`
+**What it does**: Captures copy criteria (voice, structure, conversion).  
+**Focused on**: Copywriters and content/brand teams.
+- `Extract my tone rules for B2B landing pages.`
+- `Create prompts for rewrites with brand voice.`
 
 ### ![support_agent](https://fonts.gstatic.com/s/i/materialicons/support_agent/v13/24px.svg) ceet-customer-success
-**Qué hace**: Modela toma de decisiones en onboarding, retención y expansión.  
-**Enfocada a**: CSMs, leads de soporte y postventa.
-- `Sintetiza mi playbook de cuentas en riesgo.`
-- `Genera reglas de priorización de health score.`
+**What it does**: Models decision-making for onboarding, retention, and expansion.  
+**Focused on**: CSMs, support leads, and post-sales teams.
+- `Synthesize my at-risk account playbook.`
+- `Generates health score prioritization rules.`
 
 ### ![insights](https://fonts.gstatic.com/s/i/materialicons/insights/v11/24px.svg) ceet-data-analytics
-**Qué hace**: Extrae marcos de análisis, experimentación y métricas.  
-**Enfocada a**: Analistas, data practitioners y equipos growth.
-- `Convierte mi método de análisis en un cognitive clone.`
-- `Crea comandos para revisar hipótesis y sesgos en dashboards.`
+**What it does**: Extracts analysis, experimentation, and metrics frameworks.  
+**Focused on**: Analysts, data practitioners, and growth teams.
+- `Converts my analysis method into a cognitive clone.`
+- `Creates commands to review hypotheses and biases in dashboards.`
 
 ### ![cloud](https://fonts.gstatic.com/s/i/materialicons/cloud/v17/24px.svg) ceet-devops-sre
-**Qué hace**: Captura criterios SRE/DevOps para operación, incidentes y fiabilidad.  
-**Enfocada a**: SREs, platform engineers y on-call leads.
-- `Modela cómo decido rollback vs forward-fix.`
-- `Genera reglas para postmortems y cambios de alto riesgo.`
+**What it does**: Captures SRE/DevOps criteria for operations, incidents, and reliability.  
+**Focused on**: SREs, platform engineers, and on-call leads.
+- `Models how I decide rollback vs forward-fix.`
+- `Generate rules for postmortems and high-risk changes.`
 
 ### ![payments](https://fonts.gstatic.com/s/i/materialicons/payments/v11/24px.svg) ceet-financial
-**Qué hace**: Estructura heurísticas de finanzas (modelos, forecast, controles).  
-**Enfocada a**: Equipos financieros y founders con foco en unit economics.
-- `Extrae mi lógica para forecast trimestral.`
-- `Crea prompts para validar supuestos de pricing y margen.`
+**What it does**: Structures finance heuristics (models, forecast, controls).  
+**Focused on**: Finance teams and founders focused on unit economics.
+- `Extracts my logic for quarterly forecasting.`
+- `Create prompts to validate pricing and margin assumptions.`
 
 ### ![flag](https://fonts.gstatic.com/s/i/materialicons/flag/v18/24px.svg) ceet-founder-ceo
-**Qué hace**: Sintetiza criterios de estrategia, narrativa y diseño organizativo.  
-**Enfocada a**: Founders, CEOs y staff estratégico.
-- `Documenta mi proceso para decidir apuestas estratégicas.`
-- `Genera un entorno AI para preparar decisiones de capital.`
+**What it does**: Synthesizes strategy, narrative, and organizational design criteria.  
+**Focused on**: Founders, CEOs, and strategic staff.
+- `Documents my process for deciding strategic bets.`
+- `Generate an AI environment to prepare capital decisions.`
 
 ### ![web](https://fonts.gstatic.com/s/i/materialicons/web/v13/24px.svg) ceet-frontend-engineer
-**Qué hace**: Extrae patrones de decisión en UI state, rendering y accesibilidad.  
-**Enfocada a**: Frontend engineers y product teams web.
-- `Crea un clone para revisión de performance en frontend.`
-- `Define reglas de accesibilidad y calidad de interacción.`
+**What it does**: Extracts decision patterns in UI state, rendering, and accessibility.  
+**Focused on**: Frontend engineers and web product teams.
+- `Creates a clone for frontend performance review.`
+- `Defines accessibility and interaction quality rules.`
 
 ### ![gavel](https://fonts.gstatic.com/s/i/materialicons/gavel/v12/24px.svg) ceet-legal-compliance
-**Qué hace**: Captura criterios de riesgo legal, políticas y compliance.  
-**Enfocada a**: Legal ops, compliance officers y equipos de riesgo.
-- `Extrae mi checklist de revisión contractual.`
-- `Genera directivas para clasificación de riesgo regulatorio.`
+**What it does**: Captures legal risk, policy, and compliance criteria.  
+**Focused on**: Legal ops, compliance officers, and risk teams.
+- `Extracts my contractual review checklist.`
+- `Generates directives for regulatory risk classification.`
 
 ### ![campaign](https://fonts.gstatic.com/s/i/materialicons/campaign/v11/24px.svg) ceet-marketing
-**Qué hace**: Modela razonamiento de posicionamiento, canales y embudos.  
-**Enfocada a**: Marketers de performance y brand/growth leads.
-- `Sintetiza mi estrategia de adquisición multicanal.`
-- `Crea prompts para auditoría de funnel y mensajes.`
+**What it does**: Models reasoning for positioning, channels, and funnels.  
+**Focused on**: Performance marketers and brand/growth leads.
+- `Synthesizes my multichannel acquisition strategy.`
+- `Creates prompts for funnel and messaging audits.`
 
 ### ![groups](https://fonts.gstatic.com/s/i/materialicons/groups/v14/24px.svg) ceet-people-ops
-**Qué hace**: Extrae criterios de hiring, performance y cultura.  
-**Enfocada a**: RR.HH., People Ops y managers de talento.
-- `Convierte mi framework de evaluación en reglas operativas.`
-- `Genera artefactos para onboarding y desarrollo profesional.`
+**What it does**: Extracts hiring, performance, and culture criteria.  
+**Focused on**: HR, People Ops, and talent managers.
+- `Converts my evaluation framework into operational rules.`
+- `Generate artifacts for onboarding and professional development.`
 
 ### ![assignment](https://fonts.gstatic.com/s/i/materialicons/assignment/v16/24px.svg) ceet-product-manager
-**Qué hace**: Captura marcos de priorización, discovery y roadmap.  
-**Enfocada a**: Product managers y product leads.
-- `Extrae cómo decido prioridad entre deuda técnica y features.`
-- `Crea comandos para preparar RFCs y decisiones de alcance.`
+**What it does**: Captures prioritization, discovery, and roadmap frameworks.  
+**Focused on**: Product managers and product leads.
+- `Extracts how I prioritize between technical debt and features.`
+- `Create commands to prepare RFCs and scope decisions.`
 
 ### ![handshake](https://fonts.gstatic.com/s/i/materialicons/handshake/v1/24px.svg) ceet-sales
-**Qué hace**: Estructura playbooks de discovery, objeciones y cierre.  
-**Enfocada a**: SDR/AE, ventas consultivas y revenue teams.
-- `Modela mi proceso para calificar oportunidades enterprise.`
-- `Genera guías de respuesta a objeciones por segmento.`
+**What it does**: Structures discovery, objection handling, and closing playbooks.  
+**Focused on**: SDR/AE, consultative sales, and revenue teams.
+- `Model my process for qualifying enterprise opportunities.`
+- `Generates objection response guides by segment.`
 
 ### ![lan](https://fonts.gstatic.com/s/i/materialicons/lan/v7/24px.svg) ceet-sub-agent-orchestration
-**Qué hace**: Define coordinación de subagentes y reparto de tareas cognitivas.  
-**Enfocada a**: Equipos que diseñan sistemas multiagente.
-- `Diseña una orquestación de agentes para auditoría técnica.`
-- `Establece reglas de handoff entre agentes especialistas.`
+**What it does**: Defines subagent coordination and distribution of cognitive tasks.  
+**Focused on**: Teams that design multi-agent systems.
+- `Designs agent orchestration for technical auditing.`
+- `Set handoff rules between specialist agents.`
 
 ### ![palette](https://fonts.gstatic.com/s/i/materialicons/palette/v14/24px.svg) ceet-ui-designer
-**Qué hace**: Captura criterio visual sobre sistemas de diseño, componentes y motion.  
-**Enfocada a**: UI designers y design systems teams.
-- `Extrae mis principios para consistencia visual cross-product.`
-- `Genera prompts para revisión de jerarquía y contraste.`
+**What it does**: Captures visual criteria for design systems, components, and motion.  
+**Focused on**: UI designers and design systems teams.
+- `Extract my principles for cross-product visual consistency.`
+- `Generates prompts for hierarchy and contrast reviews.`
 
 ### ![psychology](https://fonts.gstatic.com/s/i/materialicons/psychology/v10/24px.svg) ceet-ux-researcher
-**Qué hace**: Modela pensamiento de investigación conductual y síntesis de hallazgos.  
-**Enfocada a**: UX researchers y product discovery squads.
-- `Convierte mis entrevistas en reglas de decisión de producto.`
-- `Genera una plantilla para síntesis de patrones de comportamiento.`
+**What it does**: Models behavioral research thinking and findings synthesis.  
+**Focused on**: UX researchers and product discovery squads.
+- `Converts my interviews into product decision rules.`
+- `Generates a template for synthesizing behavior patterns.`
 
 ### ![theater_comedy](https://fonts.gstatic.com/s/i/materialicons/theater_comedy/v6/24px.svg) impersonator
-**Qué hace**: Inicializa packs CEET simulados con evidencia pública o historial de repositorios.  
-**Enfocada a**: Usuarios que necesitan un borrador rápido sin entrevista en vivo.
-- `Crea un pack inicial para un autor técnico conocido.`
-- `Genera un draft de cognitive profile desde un repositorio.`
+**What it does**: Initializes simulated CEET packs from public evidence or repository history.  
+**Focused on**: Users who need a quick draft without a live interview.
+- `Creates an initial pack for a known technical author.`
+- `Generate a cognitive profile draft from a repository.`
 
 ### ![schema](https://fonts.gstatic.com/s/i/materialicons/schema/v7/24px.svg) jira-agentic-requirements-pipeline
-**Qué hace**: Estructura un pipeline agéntico de requisitos basado en Jira.  
-**Enfocada a**: Equipos de producto/ingeniería con operación centrada en Jira.
-- `Define un flujo desde intake hasta ticket refinado.`
-- `Genera políticas de calidad para user stories en Jira.`
+**What it does**: Structures an agentic requirements pipeline based on Jira.  
+**Focused on**: Product/engineering teams with Jira-centered operations.
+- `Define a flow from intake to refined ticket.`
+- `Generates quality policies for Jira user stories.`
 
 ## Try it instantly (No installation required)
 

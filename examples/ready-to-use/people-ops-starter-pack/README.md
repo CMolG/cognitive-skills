@@ -1,8 +1,8 @@
 # Ready-to-use — people-ops-starter-pack
 
-Pack listo para usar generado desde `ceet-people-ops/templates`.
+Ready-to-use pack generated from `ceet-people-ops/templates`.
 
-## Contenido
+## Contents
 
 - `cognitive-profile.md`
 - `skills/`
@@ -10,8 +10,8 @@ Pack listo para usar generado desde `ceet-people-ops/templates`.
 - `commands/`
 - `agents/`
 
-## Uso
+## Usage
 
-1. Copia `cognitive-profile.md` como base de directivas.
-2. Selecciona skills/comandos/agentes según la tarea.
-3. Ajusta placeholders `{directives.*}` con un perfil real.
+1. Copy `cognitive-profile.md` as a directive baseline.
+2. Select skills/commands/agents according to the task.
+3. Adjust `{directives.*}` placeholders with a real profile.

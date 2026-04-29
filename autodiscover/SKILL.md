@@ -18,9 +18,9 @@ Use this skill at the start of any execution that depends on a CEET context.
    - Initialization means the CEET has an available, usable template/skill structure for execution.
 
 3. **If CEET is not initialized**
-   - Ask explicitly: **"¿Deseas inicializar este CEET ahora?"**
+   - Ask explicitly: **"Do you want to initialize this CEET now?"**
    - If the answer is **no**:
-     - Ask explicitly before exiting CEET flow: **"No tienes un CEET propio inicializado. ¿Quieres usar un CEET de ejemplo antes de seguir sin CEET?"**
+     - Ask explicitly before exiting CEET flow: **"You do not have your own CEET initialized. Do you want to use an example CEET before continuing without CEET?"**
      - If the answer is **yes**:
        - Select a relevant CEET example available in the repository.
        - Continue the execution under that example CEET context.
@@ -36,7 +36,7 @@ Use this skill at the start of any execution that depends on a CEET context.
    - Keep traceability from user request -> CEET -> selected local skill(s).
 
 5. **Complex task orchestration option**
-   - If planning reveals a complex task with distinct specialized roles, ask explicitly: **"¿Quieres que lancemos distintos roles en subagentes para ejecutar esto en paralelo y luego consolidarlo?"**
+   - If planning reveals a complex task with distinct specialized roles, ask explicitly: **"Do you want us to launch different subagent roles to execute this in parallel and then consolidate it?"**
    - If the answer is **yes**, hand off to the `ceet-sub-agent-orchestration` skill.
    - If the answer is **no**, continue with single-agent CEET execution.
 
