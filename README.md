@@ -42,133 +42,133 @@ It runs against a synthetic ticket fixture (no Jira credentials needed). Record 
 
 > Each skill has its own subsection with a distinct Material icon, description, target audience, and usage examples.
 
-# ![hub](https://fonts.gstatic.com/s/i/materialicons/hub/v12/48px.svg) 
+# ![hub](https://api.iconify.design/material-symbols/hub.svg?width=48&height=48) 
 ### autodiscover
 **What it does**: Discovers and automatically routes flows/skills according to the task.  
 **Focused on**: Users who want to reduce manual skill selection.
 - `Analyze this objective and tell me which skill should run first.`
 - `Route this request to the correct flow without me choosing a role.`
 
-# ![storage](https://fonts.gstatic.com/s/i/materialicons/storage/v10/48px.svg) 
+# ![storage](https://api.iconify.design/material-symbols/storage.svg?width=48&height=48) 
 ### ceet-backend-engineer
 **What it does**: Cognitive extraction for backend engineering (data, APIs, invariants).  
 **Focused on**: Backend engineers and technical reviewers.
 - `Generate a backend cognitive profile from an interview.`
 - `Activate an AI environment to review migrations and API contracts.`
 
-# ![brush](https://fonts.gstatic.com/s/i/materialicons/brush/v15/48px.svg) 
+# ![brush](https://api.iconify.design/material-symbols/brush.svg?width=48&height=48) 
 ### ceet-copywriter
 **What it does**: Captures copy criteria (voice, structure, conversion).  
 **Focused on**: Copywriters and content/brand teams.
 - `Extract my tone rules for B2B landing pages.`
 - `Create prompts for rewrites with brand voice.`
 
-# ![support_agent](https://fonts.gstatic.com/s/i/materialicons/support_agent/v13/48px.svg) 
+# ![support_agent](https://api.iconify.design/material-symbols/support-agent.svg?width=48&height=48) 
 ### ceet-customer-success
 **What it does**: Models decision-making for onboarding, retention, and expansion.  
 **Focused on**: CSMs, support leads, and post-sales teams.
 - `Synthesize my at-risk account playbook.`
 - `Generates health score prioritization rules.`
 
-# ![insights](https://fonts.gstatic.com/s/i/materialicons/insights/v11/48px.svg) 
+# ![insights](https://api.iconify.design/material-symbols/insights.svg?width=48&height=48) 
 ### ceet-data-analytics
 **What it does**: Extracts analysis, experimentation, and metrics frameworks.  
 **Focused on**: Analysts, data practitioners, and growth teams.
 - `Converts my analysis method into a cognitive clone.`
 - `Creates commands to review hypotheses and biases in dashboards.`
 
-# ![cloud](https://fonts.gstatic.com/s/i/materialicons/cloud/v17/48px.svg) 
+# ![cloud](https://api.iconify.design/material-symbols/cloud.svg?width=48&height=48) 
 ### ceet-devops-sre
 **What it does**: Captures SRE/DevOps criteria for operations, incidents, and reliability.  
 **Focused on**: SREs, platform engineers, and on-call leads.
 - `Models how I decide rollback vs forward-fix.`
 - `Generate rules for postmortems and high-risk changes.`
 
-# ![payments](https://fonts.gstatic.com/s/i/materialicons/payments/v11/48px.svg) 
+# ![payments](https://api.iconify.design/material-symbols/payments.svg?width=48&height=48) 
 ### ceet-financial
 **What it does**: Structures finance heuristics (models, forecast, controls).  
 **Focused on**: Finance teams and founders focused on unit economics.
 - `Extracts my logic for quarterly forecasting.`
 - `Create prompts to validate pricing and margin assumptions.`
 
-# ![flag](https://fonts.gstatic.com/s/i/materialicons/flag/v18/48px.svg) 
+# ![flag](https://api.iconify.design/material-symbols/flag.svg?width=48&height=48) 
 ### ceet-founder-ceo
 **What it does**: Synthesizes strategy, narrative, and organizational design criteria.  
 **Focused on**: Founders, CEOs, and strategic staff.
 - `Documents my process for deciding strategic bets.`
 - `Generate an AI environment to prepare capital decisions.`
 
-# ![web](https://fonts.gstatic.com/s/i/materialicons/web/v13/48px.svg) 
+# ![web](https://api.iconify.design/material-symbols/web.svg?width=48&height=48) 
 ### ceet-frontend-engineer
 **What it does**: Extracts decision patterns in UI state, rendering, and accessibility.  
 **Focused on**: Frontend engineers and web product teams.
 - `Creates a clone for frontend performance review.`
 - `Defines accessibility and interaction quality rules.`
 
-# ![gavel](https://fonts.gstatic.com/s/i/materialicons/gavel/v12/48px.svg) 
+# ![gavel](https://api.iconify.design/material-symbols/gavel.svg?width=48&height=48) 
 ### ceet-legal-compliance
 **What it does**: Captures legal risk, policy, and compliance criteria.  
 **Focused on**: Legal ops, compliance officers, and risk teams.
 - `Extracts my contractual review checklist.`
 - `Generates directives for regulatory risk classification.`
 
-### ![campaign](https://fonts.gstatic.com/s/i/materialicons/campaign/v11/48px.svg) 
+# ![campaign](https://api.iconify.design/material-symbols/campaign.svg?width=48&height=48) 
 ### ceet-marketing
 **What it does**: Models reasoning for positioning, channels, and funnels.  
 **Focused on**: Performance marketers and brand/growth leads.
 - `Synthesizes my multichannel acquisition strategy.`
 - `Creates prompts for funnel and messaging audits.`
 
-# ![groups](https://fonts.gstatic.com/s/i/materialicons/groups/v14/48px.svg) 
+# ![groups](https://api.iconify.design/material-symbols/groups.svg?width=48&height=48) 
 ### ceet-people-ops
 **What it does**: Extracts hiring, performance, and culture criteria.  
 **Focused on**: HR, People Ops, and talent managers.
 - `Converts my evaluation framework into operational rules.`
 - `Generate artifacts for onboarding and professional development.`
 
-# ![assignment](https://fonts.gstatic.com/s/i/materialicons/assignment/v16/48px.svg) 
+# ![assignment](https://api.iconify.design/material-symbols/assignment.svg?width=48&height=48) 
 ### ceet-product-manager
 **What it does**: Captures prioritization, discovery, and roadmap frameworks.  
 **Focused on**: Product managers and product leads.
 - `Extracts how I prioritize between technical debt and features.`
 - `Create commands to prepare RFCs and scope decisions.`
 
-# ![handshake](https://fonts.gstatic.com/s/i/materialicons/handshake/v1/48px.svg) 
+# ![handshake](https://api.iconify.design/material-symbols/handshake.svg?width=48&height=48) 
 ### ceet-sales
 **What it does**: Structures discovery, objection handling, and closing playbooks.  
 **Focused on**: SDR/AE, consultative sales, and revenue teams.
 - `Model my process for qualifying enterprise opportunities.`
 - `Generates objection response guides by segment.`
 
-# ![lan](https://fonts.gstatic.com/s/i/materialicons/lan/v7/48px.svg) 
+# ![lan](https://api.iconify.design/material-symbols/lan.svg?width=48&height=48) 
 ### ceet-sub-agent-orchestration
 **What it does**: Defines subagent coordination and distribution of cognitive tasks.  
 **Focused on**: Teams that design multi-agent systems.
 - `Designs agent orchestration for technical auditing.`
 - `Set handoff rules between specialist agents.`
 
-# ![palette](https://fonts.gstatic.com/s/i/materialicons/palette/v14/48px.svg) 
+# ![palette](https://api.iconify.design/material-symbols/palette.svg?width=48&height=48) 
 ### ceet-ui-designer
 **What it does**: Captures visual criteria for design systems, components, and motion.  
 **Focused on**: UI designers and design systems teams.
 - `Extract my principles for cross-product visual consistency.`
 - `Generates prompts for hierarchy and contrast reviews.`
 
-# ![psychology](https://fonts.gstatic.com/s/i/materialicons/psychology/v10/48px.svg) 
+# ![psychology](https://api.iconify.design/material-symbols/psychology.svg?width=48&height=48) 
 ### ceet-ux-researcher
 **What it does**: Models behavioral research thinking and findings synthesis.  
 **Focused on**: UX researchers and product discovery squads.
 - `Converts my interviews into product decision rules.`
 - `Generates a template for synthesizing behavior patterns.`
 
-# ![theater_comedy](https://fonts.gstatic.com/s/i/materialicons/theater_comedy/v6/48px.svg) 
+# ![theater_comedy](https://api.iconify.design/material-symbols/theater-comedy.svg?width=48&height=48) 
 ### impersonator
 **What it does**: Initializes simulated CEET packs from public evidence or repository history.  
 **Focused on**: Users who need a quick draft without a live interview.
 - `Creates an initial pack for a known technical author.`
 - `Generate a cognitive profile draft from a repository.`
 
-# ![schema](https://fonts.gstatic.com/s/i/materialicons/schema/v7/48px.svg) 
+# ![schema](https://api.iconify.design/material-symbols/schema.svg?width=48&height=48) 
 ### jira-agentic-requirements-pipeline
 **What it does**: Structures an agentic requirements pipeline based on Jira.  
 **Focused on**: Product/engineering teams with Jira-centered operations.
