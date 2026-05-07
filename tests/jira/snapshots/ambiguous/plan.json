@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0.0",
+  "issueKey": "DEMO-400",
+  "confidence": 0.6,
+  "proposedBranchName": "ai/demo-400-base",
+  "implementationScope": [
+    "Apply the business decisions captured in the functional contract",
+    "Add or update the primary business flow required by the ticket",
+    "Preserve existing behavior outside the confirmed functional scope",
+    "Add baseline tests for success, error, and out-of-scope behavior",
+    "Generate an implementation report with assumptions, decisions, risks, and review notes",
+    "Add or update support/backoffice behavior only as explicitly confirmed",
+    "Add or update user/business communications only as explicitly confirmed"
+  ],
+  "excludedScope": [
+    "Unrelated UI redesign",
+    "Cross-domain refactors not required by the ticket",
+    "New unrelated dependencies",
+    "Unapproved product expansion",
+    "Unapproved reporting/dashboard expansion",
+    "Unapproved manual operations"
+  ],
+  "detectedEntities": [
+    "approval",
+    "audit",
+    "content",
+    "review"
+  ],
+  "detectedFlows": [
+    "auditability flow",
+    "operation review or confirmation"
+  ],
+  "requiresHumanReview": true,
+  "functionalContractUsed": {
+    "businessObjective": "Decision for Business Objective",
+    "functionalScope": "Decision for Functional Scope",
+    "businessRules": [
+      "Decision for Business Rules"
+    ],
+    "stateLifecycle": [
+      "Decision for State Lifecycle"
+    ],
+    "userExperience": [
+      "Decision for User Experience"
+    ],
+    "compatibility": [
+      "Decision for Compatibility & Backward Compatibility"
+    ],
+    "rollout": [],
+    "supportAndBackoffice": [
+      "Decision for Support & Backoffice"
+    ],
+    "communications": [
+      "Decision for Messages & Communications"
+    ],
+    "riskAndAbuse": [],
+    "legalCompliancePrivacy": [
+      "Decision for Legal, Compliance & Privacy"
+    ],
+    "reporting": [],
+    "acceptanceCriteria": [
+      "Decision for Acceptance Criteria"
+    ],
+    "outOfScope": []
+  },
+  "generatedAt": "<timestamp>",
+  "status": "QUESTIONS_ONLY",
+  "note": "Confidence too low for base branch. Keep requirement discovery only."
+}

@@ -11,6 +11,27 @@ Use this skill when a task is complex enough to benefit from specialized paralle
 
 Act as a coordinator ("jefe") that plans, delegates, validates, and merges work produced by multiple specialized sub-agents.
 
+## Handoff contracts
+
+The orchestrator passes work via two JSON contracts documented in
+[`docs/contracts.md`](../docs/contracts.md):
+
+- `OrchestrationPlan` — what the orchestrator hands off.
+- `SubAgentResult` — what each sub-agent returns.
+
+Both are validated deterministically by
+[`scripts/validate_handoff.py`](scripts/validate_handoff.py). Run it
+before dispatch (plan validation) and after every sub-agent returns
+(result validation):
+
+```bash
+python3 ceet-sub-agent-orchestration/scripts/validate_handoff.py --plan plan.json
+python3 ceet-sub-agent-orchestration/scripts/validate_handoff.py --result result.json
+```
+
+A non-zero exit means the payload violates the contract; the
+orchestrator must stop instead of merging partial output.
+
 ## Mandatory workflow
 
 1. **Assess orchestration fit**

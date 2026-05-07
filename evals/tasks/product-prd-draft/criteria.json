@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "task": "product-prd-draft",
+  "minWords": 250,
+  "maxWords": 1200,
+  "requiredSections": [
+    "scope",
+    "out of scope",
+    "success",
+    "rollout",
+    "risk"
+  ],
+  "requiredPhrases": [
+    "admin",
+    "2fa",
+    "recovery",
+    "soc2",
+    "rollout",
+    "metric"
+  ]
+}

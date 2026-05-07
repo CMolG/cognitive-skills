@@ -9,9 +9,18 @@ Use this skill at the start of any execution that depends on a CEET context.
 
 ## Mandatory behavior
 
-1. **Detect target CEET**
-   - Identify which CEET is indicated by the user request, explicit name, path, or workflow context.
-   - If no CEET can be determined confidently, stop and ask for clarification.
+1. **Detect target CEET (deterministic first, then judgment)**
+   - Run `python3 autodiscover/scripts/detect.py --request "<user request>"`
+     to get a structured `{detectedCEETs, initializedCEETs, scoring,
+     recommendation}` report. The script scans the workspace for
+     `ceet-*` folders and matches the request against per-role
+     keywords. It is pure stdlib, no model needed.
+   - Use the report's `recommendation.primary` as the starting point.
+   - Override the script only if the user request contains an
+     explicit CEET name or path that the keyword matcher missed —
+     never silently disagree.
+   - If `recommendation.primary` is `null`, stop and ask for
+     clarification.
 
 2. **Check CEET initialization**
    - Verify whether the detected CEET is already initialized in the current workspace/session.

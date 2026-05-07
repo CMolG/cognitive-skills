@@ -1,0 +1,326 @@
+{
+  "schemaVersion": "1.0.0",
+  "runId": "seed-2026-05-07",
+  "tasks": {
+    "copy-headlines": {
+      "criteria": {
+        "schemaVersion": "1.0.0",
+        "task": "copy-headlines",
+        "minWords": 60,
+        "maxWords": 350,
+        "requiredSections": [
+          "headline 1",
+          "headline 2",
+          "headline 3"
+        ],
+        "requiredPhrases": [
+          "sre",
+          "incident",
+          "trace",
+          "log",
+          "outage",
+          "latency"
+        ]
+      },
+      "arms": {
+        "baseline": {
+          "wordCount": 61,
+          "sectionCount": 4,
+          "lengthWithinBounds": true,
+          "phraseCoverage": 0.3333,
+          "phraseHits": {
+            "sre": false,
+            "incident": false,
+            "trace": true,
+            "log": true,
+            "outage": false,
+            "latency": false
+          },
+          "sectionCoverage": 1.0,
+          "sectionHits": {
+            "headline 1": true,
+            "headline 2": true,
+            "headline 3": true
+          },
+          "voiceAlignment": 0.2732,
+          "compositeScore": 0.5355
+        },
+        "ceet": {
+          "wordCount": 113,
+          "sectionCount": 4,
+          "lengthWithinBounds": true,
+          "phraseCoverage": 1.0,
+          "phraseHits": {
+            "sre": true,
+            "incident": true,
+            "trace": true,
+            "log": true,
+            "outage": true,
+            "latency": true
+          },
+          "sectionCoverage": 1.0,
+          "sectionHits": {
+            "headline 1": true,
+            "headline 2": true,
+            "headline 3": true
+          },
+          "voiceAlignment": 0.3107,
+          "compositeScore": 0.7702
+        },
+        "generic": {
+          "wordCount": 50,
+          "sectionCount": 4,
+          "lengthWithinBounds": false,
+          "phraseCoverage": 0.0,
+          "phraseHits": {
+            "sre": false,
+            "incident": false,
+            "trace": false,
+            "log": false,
+            "outage": false,
+            "latency": false
+          },
+          "sectionCoverage": 1.0,
+          "sectionHits": {
+            "headline 1": true,
+            "headline 2": true,
+            "headline 3": true
+          },
+          "voiceAlignment": 0.2187,
+          "compositeScore": 0.4062
+        }
+      },
+      "deltas": {
+        "ceetMinusBaseline": 0.2347,
+        "ceetMinusGeneric": 0.364
+      }
+    },
+    "engineering-pr-review": {
+      "criteria": {
+        "schemaVersion": "1.0.0",
+        "task": "engineering-pr-review",
+        "minWords": 200,
+        "maxWords": 1500,
+        "requiredSections": [
+          "summary",
+          "risk",
+          "rollback"
+        ],
+        "requiredPhrases": [
+          "expand",
+          "contract",
+          "dual-write",
+          "feature flag",
+          "blast radius",
+          "unique index",
+          "lock",
+          "rollback",
+          "backfill",
+          "rename"
+        ]
+      },
+      "arms": {
+        "baseline": {
+          "wordCount": 177,
+          "sectionCount": 7,
+          "lengthWithinBounds": false,
+          "phraseCoverage": 0.4,
+          "phraseHits": {
+            "expand": false,
+            "contract": false,
+            "dual-write": false,
+            "feature flag": false,
+            "blast radius": false,
+            "unique index": true,
+            "lock": true,
+            "rollback": true,
+            "backfill": false,
+            "rename": true
+          },
+          "sectionCoverage": 1.0,
+          "sectionHits": {
+            "summary": true,
+            "risk": true,
+            "rollback": true
+          },
+          "voiceAlignment": 0.366,
+          "compositeScore": 0.5887
+        },
+        "ceet": {
+          "wordCount": 451,
+          "sectionCount": 5,
+          "lengthWithinBounds": true,
+          "phraseCoverage": 1.0,
+          "phraseHits": {
+            "expand": true,
+            "contract": true,
+            "dual-write": true,
+            "feature flag": true,
+            "blast radius": true,
+            "unique index": true,
+            "lock": true,
+            "rollback": true,
+            "backfill": true,
+            "rename": true
+          },
+          "sectionCoverage": 1.0,
+          "sectionHits": {
+            "summary": true,
+            "risk": true,
+            "rollback": true
+          },
+          "voiceAlignment": 0.5615,
+          "compositeScore": 0.8538
+        },
+        "generic": {
+          "wordCount": 132,
+          "sectionCount": 6,
+          "lengthWithinBounds": false,
+          "phraseCoverage": 0.2,
+          "phraseHits": {
+            "expand": false,
+            "contract": false,
+            "dual-write": false,
+            "feature flag": false,
+            "blast radius": false,
+            "unique index": false,
+            "lock": false,
+            "rollback": true,
+            "backfill": false,
+            "rename": true
+          },
+          "sectionCoverage": 1.0,
+          "sectionHits": {
+            "summary": true,
+            "risk": true,
+            "rollback": true
+          },
+          "voiceAlignment": 0.1304,
+          "compositeScore": 0.4435
+        }
+      },
+      "deltas": {
+        "ceetMinusBaseline": 0.2651,
+        "ceetMinusGeneric": 0.4103
+      }
+    },
+    "product-prd-draft": {
+      "criteria": {
+        "schemaVersion": "1.0.0",
+        "task": "product-prd-draft",
+        "minWords": 250,
+        "maxWords": 1200,
+        "requiredSections": [
+          "scope",
+          "out of scope",
+          "success",
+          "rollout",
+          "risk"
+        ],
+        "requiredPhrases": [
+          "admin",
+          "2fa",
+          "recovery",
+          "soc2",
+          "rollout",
+          "metric"
+        ]
+      },
+      "arms": {
+        "baseline": {
+          "wordCount": 101,
+          "sectionCount": 8,
+          "lengthWithinBounds": false,
+          "phraseCoverage": 1.0,
+          "phraseHits": {
+            "admin": true,
+            "2fa": true,
+            "recovery": true,
+            "soc2": true,
+            "rollout": true,
+            "metric": true
+          },
+          "sectionCoverage": 1.0,
+          "sectionHits": {
+            "scope": true,
+            "out of scope": true,
+            "success": true,
+            "rollout": true,
+            "risk": true
+          },
+          "voiceAlignment": 0.3524,
+          "compositeScore": 0.7841
+        },
+        "ceet": {
+          "wordCount": 454,
+          "sectionCount": 8,
+          "lengthWithinBounds": true,
+          "phraseCoverage": 1.0,
+          "phraseHits": {
+            "admin": true,
+            "2fa": true,
+            "recovery": true,
+            "soc2": true,
+            "rollout": true,
+            "metric": true
+          },
+          "sectionCoverage": 1.0,
+          "sectionHits": {
+            "scope": true,
+            "out of scope": true,
+            "success": true,
+            "rollout": true,
+            "risk": true
+          },
+          "voiceAlignment": 0.4421,
+          "compositeScore": 0.814
+        },
+        "generic": {
+          "wordCount": 112,
+          "sectionCount": 8,
+          "lengthWithinBounds": false,
+          "phraseCoverage": 1.0,
+          "phraseHits": {
+            "admin": true,
+            "2fa": true,
+            "recovery": true,
+            "soc2": true,
+            "rollout": true,
+            "metric": true
+          },
+          "sectionCoverage": 1.0,
+          "sectionHits": {
+            "scope": true,
+            "out of scope": true,
+            "success": true,
+            "rollout": true,
+            "risk": true
+          },
+          "voiceAlignment": 0.197,
+          "compositeScore": 0.7323
+        }
+      },
+      "deltas": {
+        "ceetMinusBaseline": 0.0299,
+        "ceetMinusGeneric": 0.0817
+      }
+    }
+  },
+  "aggregate": {
+    "baseline": {
+      "mean": 0.6361,
+      "stdev": 0.1309,
+      "n": 3
+    },
+    "ceet": {
+      "mean": 0.8127,
+      "stdev": 0.0418,
+      "n": 3
+    },
+    "generic": {
+      "mean": 0.5273,
+      "stdev": 0.1785,
+      "n": 3
+    }
+  }
+}

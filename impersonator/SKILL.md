@@ -81,3 +81,15 @@ A run is complete only when:
 3. `evidence-map.md` exists and covers all populated directive fields.
 4. `README.md` documents the pack and how to use it in any AI tool.
 5. Unknown/low-confidence areas are explicit.
+6. The validator passes:
+
+   ```bash
+   python3 impersonator/scripts/validate_pack.py \
+     examples/ready-to-use/<output-slug>
+   ```
+
+   This script enforces criteria 2–5 deterministically. It checks the
+   Simulation Notice banner, a minimum of evidence rows, the absence
+   of unfilled `{directives.*}` placeholders, and that every directive
+   cited in `cognitive-profile.md` also appears in `evidence-map.md`.
+   A non-zero exit code means the pack must not be published.

@@ -1,3 +1,8 @@
+---
+schemaVersion: "1.0.0"
+artifactType: cognitive-profile
+---
+
 > **Simulation Notice:** This artifact is inferred from external evidence, not from a first-person CEET interview.
 > **Subject:** Netflix Tech Blog (public engineering voice)
 > **Source Basis:** Inferred from Netflix public engineering blog posts and conference talks about distributed systems, resilience, data reliability, observability, and developer productivity.

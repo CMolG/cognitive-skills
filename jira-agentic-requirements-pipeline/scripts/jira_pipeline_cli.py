@@ -30,6 +30,41 @@ from typing import Any
 DEFAULT_STATE_FILE = ".jira_requirement_state.json"
 MAX_REQUIRED_QUESTIONS = 10
 MIN_REQUIRED_QUESTIONS = 5
+CONTRACT_SCHEMA_VERSION = "1.0.0"
+
+DEFAULT_BASELINE_BUDGET = 4
+DEFAULT_SIGNAL_BUDGET = 6
+DEFAULT_MAX_COMMENTS = 1000
+
+# P0 templates that should always be candidates regardless of detected signals.
+# These cover universally required decisions (objective, scope, rules, lifecycle).
+BASELINE_TEMPLATE_IDS = {"BO-1", "FS-1", "BR-1", "SL-1"}
+
+AMBIGUITY_MARKERS = [
+    "tbd",
+    "?",
+    "we should",
+    " or ",
+    "alternatively",
+    "maybe",
+    "not sure",
+    "to be defined",
+    "pending",
+    "unknown",
+]
+
+CONSTRAINT_KEYWORDS = [
+    "only",
+    "except",
+    "unless",
+    "all users",
+    "legacy",
+    "retry",
+    "limit",
+    "expire",
+    "support",
+    "compliance",
+]
 
 
 @dataclass
@@ -40,15 +75,18 @@ class JiraConfig:
 
 
 def load_json(path: Path) -> dict[str, Any]:
+    """Read a UTF-8 JSON file and return its parsed object."""
     return json.loads(path.read_text(encoding="utf-8"))
 
 
 def write_json(path: Path, data: dict[str, Any]) -> None:
+    """Write `data` as pretty-printed UTF-8 JSON, creating parents as needed."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def get_jira_config() -> JiraConfig:
+    """Read Jira credentials from env vars or fail fast with a clear error."""
     base_url = os.getenv("JIRA_BASE_URL", "").strip().rstrip("/")
     email = os.getenv("JIRA_EMAIL", "").strip()
     api_token = os.getenv("JIRA_API_TOKEN", "").strip()
@@ -67,27 +105,50 @@ def get_jira_config() -> JiraConfig:
     return JiraConfig(base_url=base_url, email=email, api_token=api_token)
 
 
+class JiraClient:
+    """Thin wrapper around Jira REST API v3.
+
+    The client owns transport (urllib) and authentication so tests can
+    inject a fake by subclassing or by passing an alternative `client`
+    object that exposes the same `get(path, query) -> dict` contract.
+    """
+
+    def __init__(self, config: JiraConfig, timeout: int = 30) -> None:
+        self.config = config
+        self.timeout = timeout
+
+    def get(self, path: str, query: dict[str, str] | None = None) -> dict[str, Any]:
+        query_str = ""
+        if query:
+            query_str = "?" + urllib.parse.urlencode(query)
+
+        url = f"{self.config.base_url}{path}{query_str}"
+        auth = base64.b64encode(
+            f"{self.config.email}:{self.config.api_token}".encode("utf-8")
+        ).decode("ascii")
+
+        req = urllib.request.Request(url)
+        req.add_header("Authorization", f"Basic {auth}")
+        req.add_header("Accept", "application/json")
+
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")
+            raise SystemExit(f"Jira HTTP {exc.code}: {body}") from exc
+
+
 def jira_get(config: JiraConfig, path: str, query: dict[str, str] | None = None) -> dict[str, Any]:
-    query_str = ""
-    if query:
-        query_str = "?" + urllib.parse.urlencode(query)
+    """Perform an authenticated GET against Jira REST API and return JSON.
 
-    url = f"{config.base_url}{path}{query_str}"
-    auth = base64.b64encode(f"{config.email}:{config.api_token}".encode("utf-8")).decode("ascii")
-
-    req = urllib.request.Request(url)
-    req.add_header("Authorization", f"Basic {auth}")
-    req.add_header("Accept", "application/json")
-
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")
-        raise SystemExit(f"Jira HTTP {exc.code}: {body}") from exc
+    Backward-compatible thin wrapper around `JiraClient.get`.
+    """
+    return JiraClient(config).get(path, query)
 
 
 def extract_text_from_jira_node(node: Any) -> str:
+    """Walk a Jira ADF node and concatenate every leaf text fragment."""
     if node is None:
         return ""
     if isinstance(node, str):
@@ -111,16 +172,18 @@ def extract_text_from_jira_node(node: Any) -> str:
     return " ".join(chunks).strip()
 
 
-def fetch_issue(args: argparse.Namespace) -> int:
-    config = get_jira_config()
-    payload = jira_get(
-        config,
+def fetch_issue(args: argparse.Namespace, client: "JiraClient | None" = None) -> int:
+    """Fetch a Jira issue and its full comment history into a normalized JSON file."""
+    if client is None:
+        client = JiraClient(get_jira_config())
+    payload = client.get(
         f"/rest/api/3/issue/{args.issue_key}",
-        query={"fields": "summary,description,labels,comment,customfield_10011,status"},
+        query={"fields": "summary,description,labels,customfield_10011,status"},
     )
 
     fields = payload.get("fields", {})
-    comments = fields.get("comment", {}).get("comments", [])
+    max_comments = getattr(args, "max_comments", DEFAULT_MAX_COMMENTS)
+    raw_comments = fetch_all_comments(client, args.issue_key, max_comments)
 
     normalized = {
         "issueKey": payload.get("key"),
@@ -135,7 +198,7 @@ def fetch_issue(args: argparse.Namespace) -> int:
                 "body": extract_text_from_jira_node(c.get("body")),
                 "created": c.get("created"),
             }
-            for c in comments
+            for c in raw_comments
         ],
         "acceptanceCriteria": [],
         "fetchedAt": datetime.now(timezone.utc).isoformat(),
@@ -147,13 +210,59 @@ def fetch_issue(args: argparse.Namespace) -> int:
     return 0
 
 
+def fetch_all_comments(
+    client: "JiraClient",
+    issue_key: str,
+    max_comments: int,
+    page_size: int = 100,
+) -> list[dict[str, Any]]:
+    """Page through Jira's comment endpoint until `total` or `max_comments`.
+
+    Jira REST v3 returns at most 100 comments per page. The original
+    implementation read only the first page, silently truncating context on
+    active tickets. Here we loop with `startAt`, stopping when we have all
+    comments or the cap is reached. A warning is emitted to stderr if the
+    cap clipped the result.
+    """
+    collected: list[dict[str, Any]] = []
+    start_at = 0
+    total: int | None = None
+    while True:
+        remaining_cap = max_comments - len(collected)
+        if remaining_cap <= 0:
+            break
+        page = client.get(
+            f"/rest/api/3/issue/{issue_key}/comment",
+            query={
+                "startAt": str(start_at),
+                "maxResults": str(min(page_size, remaining_cap)),
+            },
+        )
+        page_comments = page.get("comments", []) or []
+        collected.extend(page_comments)
+        total = page.get("total", len(collected))
+        start_at += len(page_comments)
+        if not page_comments or start_at >= total:
+            break
+
+    if total is not None and total > len(collected):
+        sys.stderr.write(
+            f"warning: comment cap reached ({len(collected)} of {total}); "
+            f"increase --max-comments to fetch all\n"
+        )
+
+    return collected
+
+
 def discovery(args: argparse.Namespace) -> int:
+    """Run rule-based requirement discovery and emit a TicketAnalysis JSON."""
     issue = load_json(Path(args.input))
     text = build_ticket_text(issue)
 
     detected_categories = detect_category_signals(text)
 
     analysis = {
+        "schemaVersion": CONTRACT_SCHEMA_VERSION,
         "issueKey": issue.get("issueKey"),
         "title": issue.get("title"),
         "businessGoal": infer_business_goal(issue.get("title", ""), issue.get("description", "")),
@@ -172,6 +281,7 @@ def discovery(args: argparse.Namespace) -> int:
 
 
 def build_ticket_text(issue: dict[str, Any]) -> str:
+    """Concatenate title, description, labels and comments into a single lower-cased corpus."""
     chunks = [
         issue.get("title", ""),
         issue.get("description", ""),
@@ -183,6 +293,7 @@ def build_ticket_text(issue: dict[str, Any]) -> str:
 
 
 def infer_business_goal(title: str, description: str) -> str:
+    """Pick a coarse business-goal label from keyword heuristics over the ticket text."""
     text = f"{title} {description}".lower()
     if any(k in text for k in ["approve", "approval", "review", "validate"]):
         return "Add or improve a business approval/review step for a user-facing operation."
@@ -199,19 +310,44 @@ def infer_business_goal(title: str, description: str) -> str:
     return "Reduce requirement ambiguity and improve engineering readiness."
 
 
-def infer_ambiguity_level(text: str) -> str:
-    keywords = [
-        "only", "except", "unless", "all users", "legacy", "retry", "limit", "expire", "support", "compliance"
-    ]
-    hits = sum(1 for kw in keywords if kw in text)
-    if hits <= 2:
-        return "HIGH"
-    if hits <= 5:
-        return "MEDIUM"
-    return "LOW"
+def infer_ambiguity_level(text: str) -> dict[str, Any]:
+    """Score ticket ambiguity from constraint density and explicit ambiguity markers.
+
+    Returns a dict with:
+      - level: HIGH | MEDIUM | LOW
+      - constraintDensity: constraint hits per 100 words (float)
+      - ambiguityMarkers: marker hits per 100 words (float)
+      - signals: which constraint keywords and markers fired
+    The downstream `base-branch-plan` can consume the components, not only
+    the bucketed level.
+    """
+    word_count = max(len(text.split()), 1)
+    constraint_hits = [kw for kw in CONSTRAINT_KEYWORDS if kw in text]
+    marker_hits = [m for m in AMBIGUITY_MARKERS if m in text]
+
+    constraint_density = round(len(constraint_hits) * 100 / word_count, 3)
+    marker_density = round(len(marker_hits) * 100 / word_count, 3)
+
+    if constraint_density < 0.4 and marker_density >= 0.4:
+        level = "HIGH"
+    elif constraint_density >= 1.2 and marker_density < 0.4:
+        level = "LOW"
+    else:
+        level = "MEDIUM"
+
+    return {
+        "level": level,
+        "constraintDensity": constraint_density,
+        "ambiguityMarkers": marker_density,
+        "signals": {
+            "constraintKeywords": constraint_hits,
+            "ambiguityMarkers": marker_hits,
+        },
+    }
 
 
 def detect_entities(text: str) -> list[str]:
+    """Return functional entities (user, account, notification, ...) detected in the ticket text."""
     keywords = [
         "user",
         "customer",
@@ -242,6 +378,7 @@ def detect_entities(text: str) -> list[str]:
 
 
 def infer_user_actions(text: str) -> list[str]:
+    """Infer the user-facing actions (start/cancel/retry/...) implied by the text."""
     actions: list[str] = []
     if any(k in text for k in ["create", "submit", "request", "start"]):
         actions.append("start operation")
@@ -267,6 +404,7 @@ def infer_user_actions(text: str) -> list[str]:
 
 
 def infer_possible_flows(text: str) -> list[str]:
+    """Infer the business flows (creation, review, retry, ...) likely affected by the ticket."""
     flows: list[str] = []
     if any(k in text for k in ["create", "submit", "request", "start"]):
         flows.append("operation creation")
@@ -292,6 +430,7 @@ def infer_possible_flows(text: str) -> list[str]:
 
 
 def infer_explicit_requirements(text: str) -> list[str]:
+    """Surface high-level requirement classes (mandatory, approval, communication, ...) from the text."""
     reqs: list[str] = []
     if any(k in text for k in ["must", "should", "required", "mandatory"]):
         reqs.append("mandatory business behavior requested")
@@ -313,6 +452,7 @@ def infer_explicit_requirements(text: str) -> list[str]:
 
 
 def detect_category_signals(text: str) -> list[str]:
+    """Return the sorted categories whose keyword set fires against the ticket text."""
     category_keywords: dict[str, list[str]] = {
         "Business Objective": ["goal", "outcome", "metric", "priority", "deadline"],
         "Functional Scope": ["all users", "country", "channel", "plan", "segment", "partner"],
@@ -364,6 +504,7 @@ def detect_category_signals(text: str) -> list[str]:
 
 
 def infer_missing_decisions(text: str, categories: list[str]) -> list[str]:
+    """List decision keys (scope, expiration, communications, ...) missing from the text."""
     checks = {
         "scope": ["all users", "country", "segment", "partner"],
         "success_behavior": ["success", "confirmed", "approved"],
@@ -392,6 +533,7 @@ def infer_missing_decisions(text: str, categories: list[str]) -> list[str]:
 
 
 def question_templates() -> list[dict[str, Any]]:
+    """Return the static catalog of business question templates."""
     return [
         {
             "template_id": "BO-1",
@@ -685,27 +827,18 @@ def question_templates() -> list[dict[str, Any]]:
 
 
 def generate_questions(args: argparse.Namespace) -> int:
+    """Build the prioritized BusinessQuestionSet for a discovery analysis."""
     analysis = load_json(Path(args.input))
     missing_decisions = set(analysis.get("missingBusinessDecisions", []))
     issue_key = analysis.get("issueKey")
 
-    candidates = []
-    for tpl in question_templates():
-        if should_include_template(tpl, missing_decisions):
-            candidates.append(tpl)
+    baseline_budget = getattr(args, "baseline_budget", DEFAULT_BASELINE_BUDGET)
+    signal_budget = getattr(args, "signal_budget", DEFAULT_SIGNAL_BUDGET)
 
-    if len(candidates) < MIN_REQUIRED_QUESTIONS:
-        for tpl in question_templates():
-            if tpl not in candidates and tpl["priority"] in {"P0", "P1"}:
-                candidates.append(tpl)
-            if len([c for c in candidates if c["required"]]) >= MIN_REQUIRED_QUESTIONS:
-                break
-
-    required = [q for q in candidates if q.get("required", False) and q["priority"] in {"P0", "P1"}]
-    optional_future = [q for q in candidates if q["priority"] in {"P2", "P3"}]
-
-    required = sort_questions(required)[:MAX_REQUIRED_QUESTIONS]
-    optional_future = sort_questions(optional_future)
+    required = select_required_templates(missing_decisions, baseline_budget, signal_budget)
+    optional_future = sort_questions(
+        [t for t in question_templates() if t["priority"] in {"P2", "P3"}]
+    )
 
     questions_payload: list[dict[str, Any]] = []
     for idx, question in enumerate(required, start=1):
@@ -721,6 +854,7 @@ def generate_questions(args: argparse.Namespace) -> int:
         optional_payload.append(payload)
 
     output = {
+        "schemaVersion": CONTRACT_SCHEMA_VERSION,
         "issueKey": issue_key,
         "status": "WAITING_BUSINESS_INPUT",
         "summary": (
@@ -730,6 +864,10 @@ def generate_questions(args: argparse.Namespace) -> int:
         "questions": questions_payload,
         "optionalFutureDecisions": optional_payload,
         "questionCount": len(questions_payload),
+        "budgets": {
+            "baseline": baseline_budget,
+            "signal": signal_budget,
+        },
         "generatedAt": datetime.now(timezone.utc).isoformat(),
     }
 
@@ -738,21 +876,74 @@ def generate_questions(args: argparse.Namespace) -> int:
     return 0
 
 
+def select_required_templates(
+    missing_decisions: set[str],
+    baseline_budget: int,
+    signal_budget: int,
+) -> list[dict[str, Any]]:
+    """Pick the required questions using a baseline + signal budget split.
+
+    The baseline budget reserves slots for universally required P0 templates
+    (objective/scope/rules/lifecycle). The signal budget is filled by
+    templates whose declared signals intersect the ticket's missing
+    decisions, ranked by match strength. Underused signal slots overflow
+    into remaining P0/P1 templates so the pipeline never under-asks.
+    """
+    templates = question_templates()
+    priority_rank = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
+
+    baseline_pool = [t for t in templates if t["template_id"] in BASELINE_TEMPLATE_IDS]
+    baseline_pool.sort(key=lambda t: (priority_rank.get(t["priority"], 9), t["template_id"]))
+    selected_baseline = baseline_pool[:baseline_budget]
+
+    def signal_strength(t: dict[str, Any]) -> int:
+        return len(set(t.get("signals", [])).intersection(missing_decisions))
+
+    signal_candidates = [
+        t for t in templates
+        if t["template_id"] not in BASELINE_TEMPLATE_IDS and signal_strength(t) > 0
+    ]
+    signal_candidates.sort(
+        key=lambda t: (-signal_strength(t), priority_rank.get(t["priority"], 9), t["template_id"])
+    )
+    selected_signal = signal_candidates[:signal_budget]
+
+    remaining = signal_budget - len(selected_signal)
+    if remaining > 0:
+        already = {t["template_id"] for t in selected_baseline + selected_signal}
+        overflow = [
+            t for t in templates
+            if t["template_id"] not in already
+            and t.get("required", False)
+            and t["priority"] in {"P0", "P1"}
+        ]
+        overflow.sort(key=lambda t: (priority_rank.get(t["priority"], 9), t["template_id"]))
+        selected_signal.extend(overflow[:remaining])
+
+    return selected_baseline + selected_signal
+
+
 def should_include_template(template: dict[str, Any], missing_decisions: set[str]) -> bool:
+    """Return True if a template is a candidate for inclusion.
+
+    Kept for backward compatibility with older callers; the real selection
+    logic now lives in `select_required_templates` and respects the
+    baseline/signal budget split.
+    """
+    if template["template_id"] in BASELINE_TEMPLATE_IDS:
+        return True
     signals = set(template.get("signals", []))
-    if signals.intersection(missing_decisions):
-        return True
-    if template["priority"] == "P0":
-        return True
-    return False
+    return bool(signals.intersection(missing_decisions))
 
 
 def sort_questions(questions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Sort questions by priority bucket then category for stable output."""
     priority_rank = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
     return sorted(questions, key=lambda q: (priority_rank.get(q.get("priority", "P3"), 9), q.get("category", "")))
 
 
 def collect_input(args: argparse.Namespace) -> int:
+    """Walk the user through required questions interactively, persisting state per answer."""
     question_set = load_json(Path(args.input))
     state_file = Path(args.state_file)
 
@@ -819,6 +1010,7 @@ def collect_input(args: argparse.Namespace) -> int:
 
 
 def resolve_contract(args: argparse.Namespace) -> int:
+    """Combine questions and captured answers into a FunctionalContract JSON."""
     question_set = load_json(Path(args.questions))
     state = load_json(Path(args.answers))
     required_questions = [q for q in question_set.get("questions", []) if q.get("required", False)]
@@ -846,7 +1038,38 @@ def resolve_contract(args: argparse.Namespace) -> int:
             }
         )
 
+    # businessObjective/functionalScope are intentionally singular: the
+    # functional contract represents one decision per ticket on these axes.
+    # Every other field defaults to the plural form so additional answers
+    # in the same category are preserved instead of silently dropped.
+    mapped_categories = {
+        "Business Objective",
+        "Functional Scope",
+        "Business Rules",
+        "State Lifecycle",
+        "User Experience",
+        "Compatibility & Backward Compatibility",
+        "Rollout & Transition",
+        "Support & Backoffice",
+        "Messages & Communications",
+        "Risk, Fraud & Abuse",
+        "Legal, Compliance & Privacy",
+        "Data & Functional Reporting",
+        "Acceptance Criteria",
+        "Out of Scope",
+    }
+    unmapped_answers = [
+        {
+            "questionId": item.get("questionId"),
+            "category": item.get("category"),
+            "answer": item.get("answer"),
+        }
+        for item in answer_items
+        if item.get("category") not in mapped_categories
+    ]
+
     contract = {
+        "schemaVersion": CONTRACT_SCHEMA_VERSION,
         "issueKey": question_set.get("issueKey"),
         "functionalContract": {
             "businessObjective": extract_answer_by_category(answer_items, "Business Objective"),
@@ -854,17 +1077,18 @@ def resolve_contract(args: argparse.Namespace) -> int:
             "businessRules": extract_answers_by_category(answer_items, "Business Rules"),
             "stateLifecycle": extract_answers_by_category(answer_items, "State Lifecycle"),
             "userExperience": extract_answers_by_category(answer_items, "User Experience"),
-            "compatibility": extract_answer_by_category(answer_items, "Compatibility & Backward Compatibility"),
-            "rollout": extract_answer_by_category(answer_items, "Rollout & Transition"),
-            "supportAndBackoffice": extract_answer_by_category(answer_items, "Support & Backoffice"),
-            "communications": extract_answer_by_category(answer_items, "Messages & Communications"),
-            "riskAndAbuse": extract_answer_by_category(answer_items, "Risk, Fraud & Abuse"),
-            "legalCompliancePrivacy": extract_answer_by_category(answer_items, "Legal, Compliance & Privacy"),
-            "reporting": extract_answer_by_category(answer_items, "Data & Functional Reporting"),
-            "acceptanceCriteria": extract_answer_by_category(answer_items, "Acceptance Criteria"),
-            "outOfScope": extract_answer_by_category(answer_items, "Out of Scope"),
+            "compatibility": extract_answers_by_category(answer_items, "Compatibility & Backward Compatibility"),
+            "rollout": extract_answers_by_category(answer_items, "Rollout & Transition"),
+            "supportAndBackoffice": extract_answers_by_category(answer_items, "Support & Backoffice"),
+            "communications": extract_answers_by_category(answer_items, "Messages & Communications"),
+            "riskAndAbuse": extract_answers_by_category(answer_items, "Risk, Fraud & Abuse"),
+            "legalCompliancePrivacy": extract_answers_by_category(answer_items, "Legal, Compliance & Privacy"),
+            "reporting": extract_answers_by_category(answer_items, "Data & Functional Reporting"),
+            "acceptanceCriteria": extract_answers_by_category(answer_items, "Acceptance Criteria"),
+            "outOfScope": extract_answers_by_category(answer_items, "Out of Scope"),
         },
         "source": "business_answers",
+        "unmappedAnswers": unmapped_answers,
         "unresolvedItems": infer_unresolved_contract_items(answer_items),
         "resolvedAt": datetime.now(timezone.utc).isoformat(),
     }
@@ -875,6 +1099,7 @@ def resolve_contract(args: argparse.Namespace) -> int:
 
 
 def extract_answer_by_category(answer_items: list[dict[str, Any]], category: str) -> str | None:
+    """Return the first answer found for `category`, or None. Use for fields that must be singular."""
     for item in answer_items:
         if item.get("category") == category:
             return item.get("answer")
@@ -882,6 +1107,7 @@ def extract_answer_by_category(answer_items: list[dict[str, Any]], category: str
 
 
 def extract_answers_by_category(answer_items: list[dict[str, Any]], category: str) -> list[str]:
+    """Return every non-empty answer captured for `category` (preserving order)."""
     return [
         item["answer"]
         for item in answer_items
@@ -890,6 +1116,7 @@ def extract_answers_by_category(answer_items: list[dict[str, Any]], category: st
 
 
 def infer_unresolved_contract_items(answer_items: list[dict[str, Any]]) -> list[str]:
+    """Flag answers containing TBD/unknown-style markers as unresolved contract items."""
     unresolved_markers = [
         "unknown",
         "pending",
@@ -910,6 +1137,7 @@ def infer_unresolved_contract_items(answer_items: list[dict[str, Any]]) -> list[
 
 
 def base_branch_plan(args: argparse.Namespace) -> int:
+    """Combine TicketAnalysis and FunctionalContract into a BaseBranchPlan JSON."""
     analysis = load_json(Path(args.analysis))
     contract = load_json(Path(args.contract))
 
@@ -929,10 +1157,13 @@ def base_branch_plan(args: argparse.Namespace) -> int:
     detected_entities = analysis.get("functionalEntities", [])
     functional_contract = contract.get("functionalContract", {})
 
+    # `proposedBranchName` is a name suggestion only; this CLI never creates
+    # the branch. The engineer creates it after reviewing the plan.
     plan = {
+        "schemaVersion": CONTRACT_SCHEMA_VERSION,
         "issueKey": issue_key,
         "confidence": confidence,
-        "branchName": f"ai/{sanitize_branch_part(issue_key)}-base",
+        "proposedBranchName": f"ai/{sanitize_branch_part(issue_key)}-base",
         "implementationScope": build_generic_implementation_scope(detected_flows, functional_contract),
         "excludedScope": [
             "Unrelated UI redesign",
@@ -963,7 +1194,91 @@ def base_branch_plan(args: argparse.Namespace) -> int:
     return 0
 
 
+# Fields the host model is allowed to refine in an LLM-augmented analysis
+# patch. Anything outside this allowlist is rejected so the host model
+# cannot rewrite identity fields (issueKey, schemaVersion) or volatile
+# metadata (timestamps).
+LLM_PATCH_ALLOWED_KEYS = {
+    "businessGoal",
+    "functionalEntities",
+    "userActions",
+    "possibleAffectedFlows",
+    "explicitRequirements",
+    "missingBusinessDecisions",
+    "detectedCategories",
+    "ambiguityLevel",
+}
+
+LLM_PATCH_LIST_KEYS = {
+    "functionalEntities",
+    "userActions",
+    "possibleAffectedFlows",
+    "explicitRequirements",
+    "missingBusinessDecisions",
+    "detectedCategories",
+}
+
+
+def merge_llm_suggestions(args: argparse.Namespace) -> int:
+    """Merge a host-model patch into a TicketAnalysis without trusting it blindly.
+
+    The host model produces `suggestions.json` after reading the
+    rule-based `analysis.json`. This command applies the patch under
+    three rules:
+      - Only keys in `LLM_PATCH_ALLOWED_KEYS` are accepted; anything
+        else is reported as `rejectedKeys` in the merged output.
+      - For list-shaped fields (entities, flows, ...) the merge is the
+        sorted union of rule-based + LLM suggestions, so additions
+        compound and the deterministic core is never overwritten.
+      - Everything else is replaced by the LLM value, but the original
+        rule-based value is kept under `_ruleBased.<field>` for
+        provenance.
+    """
+    analysis = load_json(Path(args.analysis))
+    suggestions = load_json(Path(args.suggestions))
+
+    rejected: list[str] = []
+    accepted: list[str] = []
+    rule_based_snapshot: dict[str, Any] = {}
+
+    for key, value in suggestions.items():
+        if key == "schemaVersion" or key == "issueKey":
+            continue
+        if key not in LLM_PATCH_ALLOWED_KEYS:
+            rejected.append(key)
+            continue
+
+        rule_based_snapshot[key] = analysis.get(key)
+
+        if key in LLM_PATCH_LIST_KEYS:
+            existing = analysis.get(key) or []
+            if not isinstance(value, list):
+                rejected.append(key)
+                continue
+            merged = sorted({str(x) for x in list(existing) + list(value) if x is not None and x != ""})
+            analysis[key] = merged
+        else:
+            analysis[key] = value
+        accepted.append(key)
+
+    analysis["_llmAugmentation"] = {
+        "acceptedKeys": sorted(accepted),
+        "rejectedKeys": sorted(rejected),
+        "ruleBasedSnapshot": rule_based_snapshot,
+        "appliedAt": datetime.now(timezone.utc).isoformat(),
+    }
+
+    output = Path(args.output) if args.output else Path(args.analysis)
+    write_json(output, analysis)
+    print(
+        f"Merged LLM suggestions into {output} "
+        f"(accepted={len(accepted)}, rejected={len(rejected)})"
+    )
+    return 0
+
+
 def sanitize_branch_part(value: str) -> str:
+    """Lower-case `value` and replace non-branch-safe characters with single dashes."""
     normalized = value.strip().lower()
     normalized = re.sub(r"[^a-z0-9._/-]+", "-", normalized)
     normalized = re.sub(r"-+", "-", normalized)
@@ -974,6 +1289,7 @@ def build_generic_implementation_scope(
     detected_flows: list[str],
     functional_contract: dict[str, Any],
 ) -> list[str]:
+    """Build the bullet list of implementation scope items for the base-branch plan."""
     scope = [
         "Apply the business decisions captured in the functional contract",
         "Add or update the primary business flow required by the ticket",
@@ -997,12 +1313,19 @@ def build_generic_implementation_scope(
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Wire up the argparse hierarchy for the six pipeline subcommands."""
     parser = argparse.ArgumentParser(description="Agentic requirements pipeline for Jira")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     p_fetch = sub.add_parser("fetch-issue", help="Fetch issue from Jira")
     p_fetch.add_argument("issue_key")
     p_fetch.add_argument("--output", default="issue.json")
+    p_fetch.add_argument(
+        "--max-comments",
+        type=int,
+        default=DEFAULT_MAX_COMMENTS,
+        help="Cap the number of comments fetched (default: 1000).",
+    )
     p_fetch.set_defaults(func=fetch_issue)
 
     p_discovery = sub.add_parser("discovery", help="Analyze missing business requirements")
@@ -1013,6 +1336,18 @@ def build_parser() -> argparse.ArgumentParser:
     p_questions = sub.add_parser("generate-questions", help="Generate prioritized business questions")
     p_questions.add_argument("--input", required=True)
     p_questions.add_argument("--output", default="business_questions.json")
+    p_questions.add_argument(
+        "--baseline-budget",
+        type=int,
+        default=DEFAULT_BASELINE_BUDGET,
+        help="Slots reserved for universally required P0 templates (default: 4).",
+    )
+    p_questions.add_argument(
+        "--signal-budget",
+        type=int,
+        default=DEFAULT_SIGNAL_BUDGET,
+        help="Slots reserved for signal-driven templates (default: 6).",
+    )
     p_questions.set_defaults(func=generate_questions)
 
     p_collect = sub.add_parser("collect-input", help="Capture business answers with resumable state")
@@ -1033,10 +1368,24 @@ def build_parser() -> argparse.ArgumentParser:
     p_plan.add_argument("--output", default="base_branch_plan.json")
     p_plan.set_defaults(func=base_branch_plan)
 
+    p_merge = sub.add_parser(
+        "merge-llm-suggestions",
+        help="Merge an LLM-produced refinement patch into a TicketAnalysis (allowlist-validated)",
+    )
+    p_merge.add_argument("--analysis", required=True)
+    p_merge.add_argument("--suggestions", required=True)
+    p_merge.add_argument(
+        "--output",
+        default=None,
+        help="Destination path. Defaults to overwriting --analysis in place.",
+    )
+    p_merge.set_defaults(func=merge_llm_suggestions)
+
     return parser
 
 
 def main() -> int:
+    """CLI entry point: parse arguments and dispatch to the chosen subcommand."""
     parser = build_parser()
     args = parser.parse_args()
     return args.func(args)

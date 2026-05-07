@@ -1,5 +1,10 @@
 # Internal contracts
 
+> **Schema version:** every artifact below ships with a top-level
+> `schemaVersion` field (currently `1.0.0`). Bumping rules: backward-compatible
+> additions bump the minor; renames or removals bump the major. The full
+> versioning policy lives in `docs/contracts.md` (repo root).
+
 ## Example Data Policy
 
 All examples in this document must use fictional, generic domains.
@@ -29,6 +34,7 @@ Preferred fictional domains include:
 
 ```json
 {
+  "schemaVersion": "1.0.0",
   "issueKey": "APP-4827",
   "title": "Enable approval step for premium content publishing",
   "detectedDomain": "content_publishing",
@@ -73,6 +79,7 @@ Preferred fictional domains include:
 
 ```json
 {
+  "schemaVersion": "1.0.0",
   "issueKey": "APP-4827",
   "status": "WAITING_BUSINESS_INPUT",
   "summary": "Business decisions are missing before a safe base-branch can be prepared for the publishing approval workflow.",
@@ -85,6 +92,7 @@ Preferred fictional domains include:
 
 ```json
 {
+  "schemaVersion": "1.0.0",
   "issueKey": "APP-4827",
   "functionalContract": {
     "approvalRequiredFor": "premium_content_before_publication",
@@ -100,9 +108,13 @@ Preferred fictional domains include:
 
 ## BaseBranchPlan
 
+> Note: `proposedBranchName` is a suggestion. The CLI never creates the
+> branch — the engineer creates it manually after reviewing the plan.
+
 ```json
 {
-  "branchName": "ai/APP-4827-premium-content-approval-base",
+  "schemaVersion": "1.0.0",
+  "proposedBranchName": "ai/APP-4827-premium-content-approval-base",
   "implementationScope": [
     "Add approval-required decision point before publishing premium content",
     "Add reviewer decision workflow",

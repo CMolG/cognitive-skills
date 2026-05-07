@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "issueKey": "DEMO-200",
+  "functionalContract": {
+    "businessObjective": "Decision for Business Objective",
+    "functionalScope": "Decision for Functional Scope",
+    "businessRules": [
+      "Decision for Business Rules"
+    ],
+    "stateLifecycle": [
+      "Decision for State Lifecycle"
+    ],
+    "userExperience": [],
+    "compatibility": [
+      "Decision for Compatibility & Backward Compatibility"
+    ],
+    "rollout": [
+      "Decision for Rollout & Transition"
+    ],
+    "supportAndBackoffice": [],
+    "communications": [
+      "Decision for Messages & Communications"
+    ],
+    "riskAndAbuse": [],
+    "legalCompliancePrivacy": [
+      "Decision for Legal, Compliance & Privacy"
+    ],
+    "reporting": [
+      "Decision for Data & Functional Reporting"
+    ],
+    "acceptanceCriteria": [
+      "Decision for Acceptance Criteria"
+    ],
+    "outOfScope": []
+  },
+  "source": "business_answers",
+  "unmappedAnswers": [],
+  "unresolvedItems": [],
+  "resolvedAt": "<timestamp>"
+}

@@ -7,6 +7,34 @@ description: Run a two-phase agentic requirements pipeline connected to Jira (Re
 
 Execute this workflow to convert ambiguous Jira tickets into actionable engineering inputs without inventing product decisions.
 
+## Quick start
+
+```bash
+export JIRA_BASE_URL="https://example.atlassian.net"
+export JIRA_EMAIL="you@example.com"
+export JIRA_API_TOKEN="<your-jira-api-token>"
+
+CLI=jira-agentic-requirements-pipeline/scripts/jira_pipeline_cli.py
+
+python3 "$CLI" fetch-issue DEMO-1 --output issue.json
+python3 "$CLI" discovery --input issue.json --output analysis.json
+python3 "$CLI" generate-questions --input analysis.json --output questions.json
+python3 "$CLI" collect-input --input questions.json --state-file .jira_requirement_state.json
+python3 "$CLI" resolve-contract --questions questions.json --answers .jira_requirement_state.json --output contract.json
+python3 "$CLI" base-branch-plan --analysis analysis.json --contract contract.json --output plan.json
+```
+
+Output files at each step:
+
+| Step | Produces | Used by next step |
+|---|---|---|
+| `fetch-issue` | `issue.json` (TicketSnapshot) | `discovery` |
+| `discovery` | `analysis.json` (TicketAnalysis) | `generate-questions`, `base-branch-plan` |
+| `generate-questions` | `questions.json` (BusinessQuestionSet) | `collect-input`, `resolve-contract` |
+| `collect-input` | `.jira_requirement_state.json` (resumable) | `resolve-contract` |
+| `resolve-contract` | `contract.json` (FunctionalContract) | `base-branch-plan` |
+| `base-branch-plan` | `plan.json` (BaseBranchPlan) | engineer review |
+
 ## Mandatory flow (run in order)
 
 1. Fetch Jira issue with `scripts/jira_pipeline_cli.py fetch-issue`.
@@ -22,7 +50,12 @@ If required answers are missing, stop in phase 1 and do not plan implementation.
 
 - Ask only functional/product/operations questions.
 - Infer architecture and implementation details from repository patterns.
-- Keep required questions small and prioritized (typically 5-10).
+- Keep required questions small and prioritized (typically 5-10 per ticket).
+- The selector reserves a baseline budget (default 4) for universally
+  required P0 templates (objective / scope / rules / lifecycle) and a
+  signal budget (default 6) for templates whose declared signals match
+  the ticket's missing decisions. Tune via `--baseline-budget` and
+  `--signal-budget`.
 - If inference confidence is low (`< 0.65`), generate questions only and request human review.
 - Never auto-merge.
 
@@ -30,11 +63,65 @@ If required answers are missing, stop in phase 1 and do not plan implementation.
 
 Set environment variables:
 
-- `JIRA_BASE_URL` (example: `https://company.atlassian.net`)
+- `JIRA_BASE_URL` (example: `https://company.atlassian.net`, no trailing slash needed)
 - `JIRA_EMAIL`
 - `JIRA_API_TOKEN`
 
-The CLI uses Jira REST API v3.
+The CLI uses Jira REST API v3 and pages through the `/comment` endpoint
+until every comment is fetched. Cap with `--max-comments` (default
+`1000`); a stderr warning fires if the cap clipped the result.
+
+## Three modes: rules, llm-augmented, hybrid
+
+The pipeline keeps a deterministic rule-based core (free, offline,
+reproducible) and lets the host model that invokes this skill augment
+it. The skill never calls a model itself — the model executing the
+skill is the one in your editor (Claude in Cursor, Claude Projects,
+ChatGPT, Gemini, etc.). Three modes:
+
+### 1. `rules` (default, no model required)
+
+Run the six commands above. The rule-based inferencers in
+`scripts/jira_pipeline_cli.py` produce every artifact deterministically
+from keyword and density signals.
+
+### 2. `llm-augmented`
+
+After `discovery` the host model reads `analysis.json` and emits a
+refinement patch as JSON. Allowed keys are exactly:
+
+```
+businessGoal, functionalEntities, userActions, possibleAffectedFlows,
+explicitRequirements, missingBusinessDecisions, detectedCategories,
+ambiguityLevel
+```
+
+Anything else is rejected. Save the patch (e.g. `suggestions.json`)
+and merge it:
+
+```bash
+python3 "$CLI" merge-llm-suggestions \
+  --analysis analysis.json \
+  --suggestions suggestions.json
+```
+
+The merger:
+- unions list-shaped fields with the rule-based output (so additions
+  compound, deterministic core is never overwritten);
+- replaces scalar fields and keeps the original under
+  `_llmAugmentation.ruleBasedSnapshot.<field>` for provenance;
+- records every accepted/rejected key under `_llmAugmentation`.
+
+The output stays usable by `generate-questions` and `base-branch-plan`
+without changes — both continue to consume `analysis.json`.
+
+### 3. `hybrid`
+
+Hybrid is just the orchestration: run `discovery` first, hand
+`analysis.json` to the host model with the prompt in
+[`templates/llm-augmentation-prompt.md`](templates/llm-augmentation-prompt.md),
+merge the patch, then continue with the rest of the pipeline. The
+deterministic baseline is always present; the model only refines.
 
 ## CLI mode without losing session state
 
@@ -45,10 +132,19 @@ For business input in terminal:
 - If terminal closes or receives `Ctrl+C`, rerun and continue from the next pending question.
 - Use `--non-interactive` to validate required completeness in CI or automation.
 
-## References and templates
+## Artifact contracts
+
+Every artifact emitted by the CLI carries a top-level `schemaVersion`
+(currently `1.0.0`). See `references/contracts.md` for the full shape and
+[`docs/contracts.md`](../docs/contracts.md) for the repo-wide versioning
+policy.
+
+## References, examples, and troubleshooting
 
 - Internal contracts: `references/contracts.md`
 - Full business question catalog and prioritization: `references/question-catalog.md`
+- Worked examples (three end-to-end runs): [`EXAMPLES.md`](EXAMPLES.md)
+- Common problems and fixes: [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md)
 - Jira/report templates: `templates/`
 
 ## Guardrails

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "task": "engineering-pr-review",
+  "minWords": 200,
+  "maxWords": 1500,
+  "requiredSections": [
+    "summary",
+    "risk",
+    "rollback"
+  ],
+  "requiredPhrases": [
+    "expand",
+    "contract",
+    "dual-write",
+    "feature flag",
+    "blast radius",
+    "unique index",
+    "lock",
+    "rollback",
+    "backfill",
+    "rename"
+  ]
+}

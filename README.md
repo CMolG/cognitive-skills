@@ -1,175 +1,240 @@
-# CEET — Cognitive Extraction Engine Toolkit
+# cognitive-skills
 
-A family of role-specific **Cognitive Extraction Engines**. Each CEET is a structured interview + synthesis skill that:
+> Capture how a person thinks in their role, then make any AI tool think the same way for the same work.
 
-1. **Interviews** a person working in a given role with deep, role-specific questions.
-2. **Extracts** their cognitive patterns — how they decide, what they pay attention to, what failure modes they watch for, which heuristics they use, and what "good" looks like to them.
-3. **Synthesizes** an **Individual Cognitive Clone** — a portable artifact describing how *this specific person* thinks in *this specific role*.
-4. **Generates** a **Personalized AI Environment** — prompts, rules, and guardrails that make any AI assistant mimic that person's judgment on their real work.
+A toolkit for **encoding human judgment as portable AI artifacts**. Run an interview, get a cognitive clone, paste it into Claude, ChatGPT, Cursor, Copilot, Gemini, or any tool that accepts a system prompt. The outputs are plain Markdown + YAML — no vendor lock-in, no SDK, no API key.
 
-> CEETs produce **tool-agnostic outputs**. The generated cognitive clone and AI environment work in Claude, ChatGPT, Cursor, Copilot, Gemini, Perplexity, or any other AI tool — because the artifacts are plain Markdown + YAML, not wrapped in any vendor's proprietary format.
+What ships in this repo:
 
+- **15 role-specific Cognitive Extraction Engines (CEETs)** — interviews + synthesis templates for backend, frontend, devops/SRE, data, product, UX, UI, copy, marketing, sales, customer success, finance, legal, people-ops, and founder/CEO.
+- **A production-grade Jira requirements pipeline** — six commands that turn ambiguous tickets into validated functional contracts with traceability, an LLM-augmented refinement step, and 85% test coverage.
+- **A deterministic eval harness** — three benchmark tasks, no judge model, release-gate ready.
+- **Three meta-skills** — auto-routing (`autodiscover`), sub-agent orchestration with validated handoff contracts, and the `impersonator` for drafting CEET packs from public evidence.
 
-## Featured updates
-
-- **Ready-to-use pack with no installation**: `backend-netflix-tech-blog` to try the CEET approach in minutes.
-- **Standalone skill `impersonator`**: generates simulated drafts of CEET packs from public evidence or repository history.
-- **Coverage for 15 professional roles** with interview scripts, templates, and examples per role.
-- **Portable provider-agnostic artifacts** (`cognitive-clone.md` + `ai-environment.md`) for reuse in Claude, ChatGPT, Cursor, Copilot, Gemini, and more.
-
-## Visual usage guide for SKILLS
-
-> Each skill has its own subsection with a distinct Material icon, description, target audience, and usage examples.
-
-### ![hub](https://fonts.gstatic.com/s/i/materialicons/hub/v12/24px.svg) autodiscover
-**What it does**: Discovers and automatically routes flows/skills according to the task.  
-**Focused on**: Users who want to reduce manual skill selection.
-- `Analyze this objective and tell me which skill should run first.`
-- `Route this request to the correct flow without me choosing a role.`
-
-### ![storage](https://fonts.gstatic.com/s/i/materialicons/storage/v10/24px.svg) ceet-backend-engineer
-**What it does**: Cognitive extraction for backend engineering (data, APIs, invariants).  
-**Focused on**: Backend engineers and technical reviewers.
-- `Generate a backend cognitive profile from an interview.`
-- `Activate an AI environment to review migrations and API contracts.`
-
-### ![brush](https://fonts.gstatic.com/s/i/materialicons/brush/v15/24px.svg) ceet-copywriter
-**What it does**: Captures copy criteria (voice, structure, conversion).  
-**Focused on**: Copywriters and content/brand teams.
-- `Extract my tone rules for B2B landing pages.`
-- `Create prompts for rewrites with brand voice.`
-
-### ![support_agent](https://fonts.gstatic.com/s/i/materialicons/support_agent/v13/24px.svg) ceet-customer-success
-**What it does**: Models decision-making for onboarding, retention, and expansion.  
-**Focused on**: CSMs, support leads, and post-sales teams.
-- `Synthesize my at-risk account playbook.`
-- `Generates health score prioritization rules.`
-
-### ![insights](https://fonts.gstatic.com/s/i/materialicons/insights/v11/24px.svg) ceet-data-analytics
-**What it does**: Extracts analysis, experimentation, and metrics frameworks.  
-**Focused on**: Analysts, data practitioners, and growth teams.
-- `Converts my analysis method into a cognitive clone.`
-- `Creates commands to review hypotheses and biases in dashboards.`
-
-### ![cloud](https://fonts.gstatic.com/s/i/materialicons/cloud/v17/24px.svg) ceet-devops-sre
-**What it does**: Captures SRE/DevOps criteria for operations, incidents, and reliability.  
-**Focused on**: SREs, platform engineers, and on-call leads.
-- `Models how I decide rollback vs forward-fix.`
-- `Generate rules for postmortems and high-risk changes.`
-
-### ![payments](https://fonts.gstatic.com/s/i/materialicons/payments/v11/24px.svg) ceet-financial
-**What it does**: Structures finance heuristics (models, forecast, controls).  
-**Focused on**: Finance teams and founders focused on unit economics.
-- `Extracts my logic for quarterly forecasting.`
-- `Create prompts to validate pricing and margin assumptions.`
-
-### ![flag](https://fonts.gstatic.com/s/i/materialicons/flag/v18/24px.svg) ceet-founder-ceo
-**What it does**: Synthesizes strategy, narrative, and organizational design criteria.  
-**Focused on**: Founders, CEOs, and strategic staff.
-- `Documents my process for deciding strategic bets.`
-- `Generate an AI environment to prepare capital decisions.`
-
-### ![web](https://fonts.gstatic.com/s/i/materialicons/web/v13/24px.svg) ceet-frontend-engineer
-**What it does**: Extracts decision patterns in UI state, rendering, and accessibility.  
-**Focused on**: Frontend engineers and web product teams.
-- `Creates a clone for frontend performance review.`
-- `Defines accessibility and interaction quality rules.`
-
-### ![gavel](https://fonts.gstatic.com/s/i/materialicons/gavel/v12/24px.svg) ceet-legal-compliance
-**What it does**: Captures legal risk, policy, and compliance criteria.  
-**Focused on**: Legal ops, compliance officers, and risk teams.
-- `Extracts my contractual review checklist.`
-- `Generates directives for regulatory risk classification.`
-
-### ![campaign](https://fonts.gstatic.com/s/i/materialicons/campaign/v11/24px.svg) ceet-marketing
-**What it does**: Models reasoning for positioning, channels, and funnels.  
-**Focused on**: Performance marketers and brand/growth leads.
-- `Synthesizes my multichannel acquisition strategy.`
-- `Creates prompts for funnel and messaging audits.`
-
-### ![groups](https://fonts.gstatic.com/s/i/materialicons/groups/v14/24px.svg) ceet-people-ops
-**What it does**: Extracts hiring, performance, and culture criteria.  
-**Focused on**: HR, People Ops, and talent managers.
-- `Converts my evaluation framework into operational rules.`
-- `Generate artifacts for onboarding and professional development.`
-
-### ![assignment](https://fonts.gstatic.com/s/i/materialicons/assignment/v16/24px.svg) ceet-product-manager
-**What it does**: Captures prioritization, discovery, and roadmap frameworks.  
-**Focused on**: Product managers and product leads.
-- `Extracts how I prioritize between technical debt and features.`
-- `Create commands to prepare RFCs and scope decisions.`
-
-### ![handshake](https://fonts.gstatic.com/s/i/materialicons/handshake/v1/24px.svg) ceet-sales
-**What it does**: Structures discovery, objection handling, and closing playbooks.  
-**Focused on**: SDR/AE, consultative sales, and revenue teams.
-- `Model my process for qualifying enterprise opportunities.`
-- `Generates objection response guides by segment.`
-
-### ![lan](https://fonts.gstatic.com/s/i/materialicons/lan/v7/24px.svg) ceet-sub-agent-orchestration
-**What it does**: Defines subagent coordination and distribution of cognitive tasks.  
-**Focused on**: Teams that design multi-agent systems.
-- `Designs agent orchestration for technical auditing.`
-- `Set handoff rules between specialist agents.`
-
-### ![palette](https://fonts.gstatic.com/s/i/materialicons/palette/v14/24px.svg) ceet-ui-designer
-**What it does**: Captures visual criteria for design systems, components, and motion.  
-**Focused on**: UI designers and design systems teams.
-- `Extract my principles for cross-product visual consistency.`
-- `Generates prompts for hierarchy and contrast reviews.`
-
-### ![psychology](https://fonts.gstatic.com/s/i/materialicons/psychology/v10/24px.svg) ceet-ux-researcher
-**What it does**: Models behavioral research thinking and findings synthesis.  
-**Focused on**: UX researchers and product discovery squads.
-- `Converts my interviews into product decision rules.`
-- `Generates a template for synthesizing behavior patterns.`
-
-### ![theater_comedy](https://fonts.gstatic.com/s/i/materialicons/theater_comedy/v6/24px.svg) impersonator
-**What it does**: Initializes simulated CEET packs from public evidence or repository history.  
-**Focused on**: Users who need a quick draft without a live interview.
-- `Creates an initial pack for a known technical author.`
-- `Generate a cognitive profile draft from a repository.`
-
-### ![schema](https://fonts.gstatic.com/s/i/materialicons/schema/v7/24px.svg) jira-agentic-requirements-pipeline
-**What it does**: Structures an agentic requirements pipeline based on Jira.  
-**Focused on**: Product/engineering teams with Jira-centered operations.
-- `Define a flow from intake to refined ticket.`
-- `Generates quality policies for Jira user stories.`
-
-## Try it instantly (No installation required)
-
-Use the ready-to-use pack at [`examples/ready-to-use/backend-netflix-tech-blog/`](examples/ready-to-use/backend-netflix-tech-blog/).
-
-1. Copy [`cognitive-profile.md`](examples/ready-to-use/backend-netflix-tech-blog/cognitive-profile.md) from that folder.
-2. Paste it into your Cursor project rules, Claude project instructions, or any AI tool's system prompt.
-3. Ask: **"Review this pull request for a database migration."**
-
-> This pack is **`backend-netflix-tech-blog`**, a simulation built from publicly available Netflix engineering materials (Netflix Tech Blog / public talks). It is a study/demo artifact, not a first-person interview profile. Full provenance is in the pack's [`evidence-map.md`](examples/ready-to-use/backend-netflix-tech-blog/evidence-map.md).
-
-## Quick Start
+## 60-second example
 
 ```bash
 git clone https://github.com/CMolG/cognitive-skills.git
 cd cognitive-skills
 ```
 
-Then either:
-
-1. **Use the ready-to-use pack directly** — open `examples/ready-to-use/backend-netflix-tech-blog/` and copy the files you need into your AI tool.
-2. **Generate a new pack via the `impersonator` skill** — point any skill-aware AI assistant at [`impersonator/SKILL.md`](impersonator/SKILL.md) and ask it to build a pack for your chosen target role + subject (public figure or repo author). Output lands in `examples/ready-to-use/<your-slug>/`.
-3. **Run a full CEET interview** for any of the 15 roles — open the role's `SKILL.md` and follow the interview flow for a first-person cognitive clone.
-
-## Before and After: Base model vs CEET pack
-
-**Prompt used in both cases:**
+Open [`examples/ready-to-use/backend-netflix-tech-blog/cognitive-profile.md`](examples/ready-to-use/backend-netflix-tech-blog/cognitive-profile.md), paste it into your AI tool's system prompt, and ask:
 
 > "Review this pull request for a database migration that renames `users.email` to `users.primary_email`, backfills data, and adds a unique index."
 
-| Base model (generic) | CEET pack (backend-netflix-tech-blog) |
+You will get a review framed in expand-and-contract phases, dual-write windows, lock-build strategy, and rollback toggles — instead of a generic "add tests, check rollback" checklist. See the [before/after table](#before-and-after-base-model-vs-ceet-pack) below for the exact difference.
+
+For the Jira pipeline specifically, watch the 90-second walkthrough:
+
+```bash
+bash examples/ready-to-use/demo-jira-pipeline.sh
+```
+
+It runs against a synthetic ticket fixture (no Jira credentials needed). Record cleanly with `asciinema rec` — see the script header for the exact command.
+
+## What's new
+
+- `1.2.0` (in progress) — Jira pipeline hardening: rule-based core fixed, LLM-augmented mode added, 76 tests at 82% coverage. Deterministic eval harness with three benchmark tasks. Meta-skills now have validated contracts (`OrchestrationPlan`, `SubAgentResult`) and a provenance enforcer for the impersonator. See [`CHANGELOG.md`](CHANGELOG.md).
+- `1.1.x` — English documentation pass; autodiscover and sub-agent orchestration skills.
+- `1.0.0` — Initial public release.
+
+## Visual usage guide for SKILLS
+
+> Each skill has its own subsection with a distinct Material icon, description, target audience, and usage examples.
+
+# ![hub](https://fonts.gstatic.com/s/i/materialicons/hub/v12/48px.svg) 
+### autodiscover
+**What it does**: Discovers and automatically routes flows/skills according to the task.  
+**Focused on**: Users who want to reduce manual skill selection.
+- `Analyze this objective and tell me which skill should run first.`
+- `Route this request to the correct flow without me choosing a role.`
+
+# ![storage](https://fonts.gstatic.com/s/i/materialicons/storage/v10/48px.svg) 
+### ceet-backend-engineer
+**What it does**: Cognitive extraction for backend engineering (data, APIs, invariants).  
+**Focused on**: Backend engineers and technical reviewers.
+- `Generate a backend cognitive profile from an interview.`
+- `Activate an AI environment to review migrations and API contracts.`
+
+# ![brush](https://fonts.gstatic.com/s/i/materialicons/brush/v15/48px.svg) 
+### ceet-copywriter
+**What it does**: Captures copy criteria (voice, structure, conversion).  
+**Focused on**: Copywriters and content/brand teams.
+- `Extract my tone rules for B2B landing pages.`
+- `Create prompts for rewrites with brand voice.`
+
+# ![support_agent](https://fonts.gstatic.com/s/i/materialicons/support_agent/v13/48px.svg) 
+### ceet-customer-success
+**What it does**: Models decision-making for onboarding, retention, and expansion.  
+**Focused on**: CSMs, support leads, and post-sales teams.
+- `Synthesize my at-risk account playbook.`
+- `Generates health score prioritization rules.`
+
+# ![insights](https://fonts.gstatic.com/s/i/materialicons/insights/v11/48px.svg) 
+### ceet-data-analytics
+**What it does**: Extracts analysis, experimentation, and metrics frameworks.  
+**Focused on**: Analysts, data practitioners, and growth teams.
+- `Converts my analysis method into a cognitive clone.`
+- `Creates commands to review hypotheses and biases in dashboards.`
+
+# ![cloud](https://fonts.gstatic.com/s/i/materialicons/cloud/v17/48px.svg) 
+### ceet-devops-sre
+**What it does**: Captures SRE/DevOps criteria for operations, incidents, and reliability.  
+**Focused on**: SREs, platform engineers, and on-call leads.
+- `Models how I decide rollback vs forward-fix.`
+- `Generate rules for postmortems and high-risk changes.`
+
+# ![payments](https://fonts.gstatic.com/s/i/materialicons/payments/v11/48px.svg) 
+### ceet-financial
+**What it does**: Structures finance heuristics (models, forecast, controls).  
+**Focused on**: Finance teams and founders focused on unit economics.
+- `Extracts my logic for quarterly forecasting.`
+- `Create prompts to validate pricing and margin assumptions.`
+
+# ![flag](https://fonts.gstatic.com/s/i/materialicons/flag/v18/48px.svg) 
+### ceet-founder-ceo
+**What it does**: Synthesizes strategy, narrative, and organizational design criteria.  
+**Focused on**: Founders, CEOs, and strategic staff.
+- `Documents my process for deciding strategic bets.`
+- `Generate an AI environment to prepare capital decisions.`
+
+# ![web](https://fonts.gstatic.com/s/i/materialicons/web/v13/48px.svg) 
+### ceet-frontend-engineer
+**What it does**: Extracts decision patterns in UI state, rendering, and accessibility.  
+**Focused on**: Frontend engineers and web product teams.
+- `Creates a clone for frontend performance review.`
+- `Defines accessibility and interaction quality rules.`
+
+# ![gavel](https://fonts.gstatic.com/s/i/materialicons/gavel/v12/48px.svg) 
+### ceet-legal-compliance
+**What it does**: Captures legal risk, policy, and compliance criteria.  
+**Focused on**: Legal ops, compliance officers, and risk teams.
+- `Extracts my contractual review checklist.`
+- `Generates directives for regulatory risk classification.`
+
+### ![campaign](https://fonts.gstatic.com/s/i/materialicons/campaign/v11/48px.svg) 
+### ceet-marketing
+**What it does**: Models reasoning for positioning, channels, and funnels.  
+**Focused on**: Performance marketers and brand/growth leads.
+- `Synthesizes my multichannel acquisition strategy.`
+- `Creates prompts for funnel and messaging audits.`
+
+# ![groups](https://fonts.gstatic.com/s/i/materialicons/groups/v14/48px.svg) 
+### ceet-people-ops
+**What it does**: Extracts hiring, performance, and culture criteria.  
+**Focused on**: HR, People Ops, and talent managers.
+- `Converts my evaluation framework into operational rules.`
+- `Generate artifacts for onboarding and professional development.`
+
+# ![assignment](https://fonts.gstatic.com/s/i/materialicons/assignment/v16/48px.svg) 
+### ceet-product-manager
+**What it does**: Captures prioritization, discovery, and roadmap frameworks.  
+**Focused on**: Product managers and product leads.
+- `Extracts how I prioritize between technical debt and features.`
+- `Create commands to prepare RFCs and scope decisions.`
+
+# ![handshake](https://fonts.gstatic.com/s/i/materialicons/handshake/v1/48px.svg) 
+### ceet-sales
+**What it does**: Structures discovery, objection handling, and closing playbooks.  
+**Focused on**: SDR/AE, consultative sales, and revenue teams.
+- `Model my process for qualifying enterprise opportunities.`
+- `Generates objection response guides by segment.`
+
+# ![lan](https://fonts.gstatic.com/s/i/materialicons/lan/v7/48px.svg) 
+### ceet-sub-agent-orchestration
+**What it does**: Defines subagent coordination and distribution of cognitive tasks.  
+**Focused on**: Teams that design multi-agent systems.
+- `Designs agent orchestration for technical auditing.`
+- `Set handoff rules between specialist agents.`
+
+# ![palette](https://fonts.gstatic.com/s/i/materialicons/palette/v14/48px.svg) 
+### ceet-ui-designer
+**What it does**: Captures visual criteria for design systems, components, and motion.  
+**Focused on**: UI designers and design systems teams.
+- `Extract my principles for cross-product visual consistency.`
+- `Generates prompts for hierarchy and contrast reviews.`
+
+# ![psychology](https://fonts.gstatic.com/s/i/materialicons/psychology/v10/48px.svg) 
+### ceet-ux-researcher
+**What it does**: Models behavioral research thinking and findings synthesis.  
+**Focused on**: UX researchers and product discovery squads.
+- `Converts my interviews into product decision rules.`
+- `Generates a template for synthesizing behavior patterns.`
+
+# ![theater_comedy](https://fonts.gstatic.com/s/i/materialicons/theater_comedy/v6/48px.svg) 
+### impersonator
+**What it does**: Initializes simulated CEET packs from public evidence or repository history.  
+**Focused on**: Users who need a quick draft without a live interview.
+- `Creates an initial pack for a known technical author.`
+- `Generate a cognitive profile draft from a repository.`
+
+# ![schema](https://fonts.gstatic.com/s/i/materialicons/schema/v7/48px.svg) 
+### jira-agentic-requirements-pipeline
+**What it does**: Structures an agentic requirements pipeline based on Jira.  
+**Focused on**: Product/engineering teams with Jira-centered operations.
+- `Define a flow from intake to refined ticket.`
+- `Generates quality policies for Jira user stories.`
+
+The CLI is six subcommands. The top-level help lists them:
+
+```text
+$ python3 jira-agentic-requirements-pipeline/scripts/jira_pipeline_cli.py --help
+usage: jira_pipeline_cli.py [-h]
+                            {fetch-issue,discovery,generate-questions,collect-input,resolve-contract,base-branch-plan}
+                            ...
+
+Agentic requirements pipeline for Jira
+
+positional arguments:
+  {fetch-issue,discovery,generate-questions,collect-input,resolve-contract,base-branch-plan}
+    fetch-issue         Fetch issue from Jira
+    discovery           Analyze missing business requirements
+    generate-questions  Generate prioritized business questions
+    collect-input       Capture business answers with resumable state
+    resolve-contract    Resolve a functional contract from answers
+    base-branch-plan    Generate base branch implementation plan
+```
+
+Each subcommand has its own `--help` — for example,
+`generate-questions --help` documents the `--baseline-budget` and
+`--signal-budget` flags. See the skill's
+[`SKILL.md`](jira-agentic-requirements-pipeline/SKILL.md),
+[`EXAMPLES.md`](jira-agentic-requirements-pipeline/EXAMPLES.md), and
+[`TROUBLESHOOTING.md`](jira-agentic-requirements-pipeline/TROUBLESHOOTING.md)
+for the full quick start.
+
+## Three ways to use this repo
+
+1. **Use a ready-made pack** — open `examples/ready-to-use/backend-netflix-tech-blog/` (or any other pack) and copy `cognitive-profile.md` into your AI tool's system prompt. Provenance is in each pack's `evidence-map.md`.
+2. **Draft a pack from public evidence** — point any skill-aware AI at [`impersonator/SKILL.md`](impersonator/SKILL.md). It generates a simulated pack for a public figure or repo author and runs through [`impersonator/scripts/validate_pack.py`](impersonator/scripts/validate_pack.py) before shipping.
+3. **Run a real CEET interview** — open the role's `SKILL.md` and follow the interview flow. Output is a first-person cognitive clone.
+
+## Before and after: base model vs CEET pack
+
+Same prompt, two arms. Verifiable with the harness in [`evals/`](evals/).
+
+**Prompt:**
+
+> "Review this pull request for a database migration that renames `users.email` to `users.primary_email`, backfills data, and adds a unique index."
+
+| Base model (generic) | CEET pack (`backend-netflix-tech-blog`) |
 |---|---|
 | Recommends adding tests and checking migration rollback. | Breaks migration into expand/contract phases and explicitly asks for dual-write windows before rename cutover. |
 | Mentions performance and downtime in general terms. | Calls out index build strategy, lock behavior, query plan verification, and rollback toggles under active traffic. |
 | Suggests validating data after migration. | Requests invariant checks (`null`, duplicate, stale writer paths), replay safety, and observability signals for each phase. |
 | Gives a broad checklist. | Prioritizes blast radius controls: canary rollout, feature flags, and explicit fail-fast criteria tied to SLO/error budget impact. |
+
+### Harness numbers (seed run, synthetic outputs)
+
+The eval harness scores three benchmark tasks with deterministic metrics: required-phrase coverage, required-section coverage, and TF-cosine voice alignment vs a per-task corpus. Composite is the mean of the three.
+
+| Task | baseline | ceet | generic | Δ ceet−baseline |
+|---|---:|---:|---:|---:|
+| `engineering-pr-review` | 0.59 | **0.85** | 0.44 | **+0.27** |
+| `product-prd-draft` | 0.78 | **0.81** | 0.73 | +0.03 |
+| `copy-headlines` | 0.54 | **0.77** | 0.41 | **+0.23** |
+
+> The seed outputs under `evals/results/seed-2026-05-07/` are synthetic — written to self-test the harness, not as a benchmark. Replace them with outputs from your own model and re-run `python3 evals/scripts/run.py --run-id <your-id>` to produce real numbers. The release gate (`--gate --min-delta 0.05`) requires `ceet` to beat `baseline` on at least 2/3 tasks.
 
 ## The 15 roles
 

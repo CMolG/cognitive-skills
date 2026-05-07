@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "task": "copy-headlines",
+  "minWords": 60,
+  "maxWords": 350,
+  "requiredSections": [
+    "headline 1",
+    "headline 2",
+    "headline 3"
+  ],
+  "requiredPhrases": [
+    "sre",
+    "incident",
+    "trace",
+    "log",
+    "outage",
+    "latency"
+  ]
+}

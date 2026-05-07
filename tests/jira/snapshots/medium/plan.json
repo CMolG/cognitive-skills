@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "issueKey": "DEMO-200",
+  "confidence": 0.78,
+  "proposedBranchName": "ai/demo-200-base",
+  "implementationScope": [
+    "Apply the business decisions captured in the functional contract",
+    "Add or update the primary business flow required by the ticket",
+    "Preserve existing behavior outside the confirmed functional scope",
+    "Add baseline tests for success, error, and out-of-scope behavior",
+    "Generate an implementation report with assumptions, decisions, risks, and review notes",
+    "Preserve backward-compatible behavior for existing consumers where required",
+    "Add or update user/business communications only as explicitly confirmed",
+    "Add or update functional tracking/reporting only as explicitly confirmed"
+  ],
+  "excludedScope": [
+    "Unrelated UI redesign",
+    "Cross-domain refactors not required by the ticket",
+    "New unrelated dependencies",
+    "Unapproved product expansion",
+    "Unapproved reporting/dashboard expansion",
+    "Unapproved manual operations"
+  ],
+  "detectedEntities": [
+    "account",
+    "approval",
+    "customer",
+    "operator",
+    "subscription",
+    "support",
+    "user"
+  ],
+  "detectedFlows": [
+    "auditability flow",
+    "commercial access flow",
+    "compatibility flow",
+    "operation review or confirmation",
+    "support operations"
+  ],
+  "requiresHumanReview": true,
+  "functionalContractUsed": {
+    "businessObjective": "Decision for Business Objective",
+    "functionalScope": "Decision for Functional Scope",
+    "businessRules": [
+      "Decision for Business Rules"
+    ],
+    "stateLifecycle": [
+      "Decision for State Lifecycle"
+    ],
+    "userExperience": [],
+    "compatibility": [
+      "Decision for Compatibility & Backward Compatibility"
+    ],
+    "rollout": [
+      "Decision for Rollout & Transition"
+    ],
+    "supportAndBackoffice": [],
+    "communications": [
+      "Decision for Messages & Communications"
+    ],
+    "riskAndAbuse": [],
+    "legalCompliancePrivacy": [
+      "Decision for Legal, Compliance & Privacy"
+    ],
+    "reporting": [
+      "Decision for Data & Functional Reporting"
+    ],
+    "acceptanceCriteria": [
+      "Decision for Acceptance Criteria"
+    ],
+    "outOfScope": []
+  },
+  "generatedAt": "<timestamp>",
+  "status": "PLAN_ONLY",
+  "note": "Medium confidence. Generate technical plan but avoid autonomous coding."
+}
